@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="data">
+    <file>../static/images/logoEN.png</file>
+  </qresource>
+  <qresource prefix="face">
+    <file>../static/images/faceIcon.png</file>
+  </qresource>
+  <qresource prefix="login">
+    <file>../static/images/bg.png</file>
+  </qresource>
+</RCC>

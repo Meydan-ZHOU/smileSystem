@@ -1,16 +1,15 @@
-import sys
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget,QMainWindow
-from ui.LoginUI import Ui_MainWindow
-from view.HomeWindow import HomeWindow
-from utils.common import SYS_STYLE
+from PyQt5.QtWidgets import QWidget
+from ui.LoginUI import Ui_Form_login
+from view.HomeLayout import HomeWindow
+from utils.common import SYS_STYLE_LOGIN
+from PyQt5.QtGui import QPainter, QPixmap
 
-class LoginWindow(Ui_MainWindow,QMainWindow):
+
+class LoginWindow(Ui_Form_login,QWidget):
     def __init__(self, parent=None):
         super(LoginWindow, self).__init__(parent)
-        self.resize(200, 200)
         self.setupUi(self)
+        self.resize(450, 350)
         self.Username = "admin"
         self.Password = "12345678"
         self.setAutoFillBackground(True)
@@ -19,18 +18,21 @@ class LoginWindow(Ui_MainWindow,QMainWindow):
         self.initSlot()
 
     def initUI(self):
-        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
-        self.setStyleSheet(SYS_STYLE)
+        self.setStyleSheet(SYS_STYLE_LOGIN)
+
+    def setBackgroundImage(self):
+        painter = QPainter(self)
+        pixmap = QPixmap("../static/images/bg.png")
+        painter.drawPixmap(self.rect(), pixmap)
 
     def initSlot(self):
-        self.pushButton.clicked.connect(self.doLogin)
+        self.login_btn.clicked.connect(self.doLogin)
 
     def doLogin(self):
         self.main_window = HomeWindow()
         print(self.main_window)
         self.main_window.show()
         self.close()
-
 
 
 

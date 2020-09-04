@@ -1,0 +1,42 @@
+* {
+    font-family: "Microsoft YaHei";
+    font-size:14px;
+}
+
+#Form_login{
+   background-color:#191d2d;
+}
+
+#Form_login QLabel{
+    color:#fff;
+}
+
+#Form_login QLineEdit{
+    height:30px;
+    border-radius:2px;
+    color:#fff;
+}
+
+#label_login_title{
+    font-size:18px;
+    font-weight:500;
+    color:#fff;
+}
+
+#Form_login QPushButton{
+    height:24px;
+    padding:4px 15px;
+    color:#fff;
+    outline:0;
+    border:1px solid #66b1ff;
+    background-color:#66b1ff;
+    border-radius:4px;
+    cursor:pointer;
+}
+#Form_login QPushButton:hover,#Form_login QPushButton:focus{
+    color:#409eff;
+    border:1px solid #c6e2ff;
+    background-color:#ecf5ff;
+    cursor:pointer;
+
+}
