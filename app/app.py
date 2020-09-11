@@ -16,7 +16,6 @@ if __name__ == "__main__":
     MainWindow = HomeWindow()
     MainWindow.setWindowTitle("人脸识别系统")
     MainWindow.show()
-
     #HttpClient.do_get("http://172.16.15.88:58888")
 
     #host = ('', 9002)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1198</width>
+    <width>1211</width>
     <height>844</height>
    </rect>
   </property>
@@ -287,94 +287,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QStackedWidget" name="stackedWidget_face">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="currentIndex">
-        <number>3</number>
-       </property>
-       <widget class="QWidget" name="page_live">
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_live">
-           <property name="leftMargin">
-            <number>5</number>
-           </property>
-           <property name="topMargin">
-            <number>5</number>
-           </property>
-           <property name="rightMargin">
-            <number>5</number>
-           </property>
-           <property name="bottomMargin">
-            <number>5</number>
-           </property>
-           <property name="horizontalSpacing">
-            <number>5</number>
-           </property>
-           <property name="verticalSpacing">
-            <number>0</number>
-           </property>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_face">
-        <layout class="QGridLayout" name="gridLayout_5">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_face">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_face_library">
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_library"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_face_task_management">
-        <layout class="QGridLayout" name="gridLayout_7">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_6"/>
-         </item>
-        </layout>
-       </widget>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_main"/>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -435,54 +353,6 @@
  </resources>
  <connections>
   <connection>
-   <sender>stackedWidget_face</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>stackedWidget_face</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>328</x>
-     <y>412</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>328</x>
-     <y>412</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>stackedWidget_face</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>Form_home</receiver>
-   <slot>setPushbuttonStatus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>4</x>
-     <y>158</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-42</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_face</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>Form_home</receiver>
-   <slot>goFaceManagementPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>432</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1085</x>
-     <y>271</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton_live</sender>
    <signal>clicked(bool)</signal>
    <receiver>Form_home</receiver>
@@ -498,10 +368,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_face</sender>
+   <signal>clicked()</signal>
+   <receiver>Form_home</receiver>
+   <slot>goFacePage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>401</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1226</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>goLivePage()</slot>
-  <slot>goFaceManagementPage()</slot>
+  <slot>goFacePage()</slot>
   <slot>setPushbuttonStatus()</slot>
  </slots>
 </ui>

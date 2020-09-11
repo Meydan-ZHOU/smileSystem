@@ -10,7 +10,7 @@ class HttpClient(object):
         return res
 
     def do_get(self,url,params=None):
-        res = requests.get(SYS_HOST+url,params = params)
+        res = requests.get(SYS_HOST+url, params=params)
         return res
 
 

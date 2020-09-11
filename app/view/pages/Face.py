@@ -1,23 +1,44 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import *
 from ui.FaceUI import Ui_Form
-from httpserver.httpclient import HttpClient
-
+from utils.common import newGridLayout
+from view.pages.FaceLibrary import FaceLibraryPage
+from view.pages.FaceTask import FaceTaskPage
+from view.pages.FaceMain import FaceMainPage
 
 class FacePage(Ui_Form,QWidget):
     def __init__(self, HomeLayout, parent=None):
         super(FacePage, self).__init__(parent)
         self.setupUi(self)
         self.HomeLayout = HomeLayout
-        self.http = HttpClient()
-        #self.getTasksList()
+        print("我是face")
+        self.goFaceMain()
 
-    def goFaceLibrayManagementPage(self):
-        self.HomeLayout.stackedWidget_face.setCurrentIndex(self.HomeLayout.widget_map['page_face_library'])
+    def initUI(self):
+        self.setObjectName("faceW")
+
+    def goFaceMain(self):
+        self.label.setText("任务列表")
+        main = FaceMainPage(self)
+        self.layoutPage(main)
+
+    def goLibraryManagementPage(self):
+        self.label.setText("人脸库管理")
+        library = FaceLibraryPage(self)
+        self.layoutPage(library)
 
     def goFaceTaskPage(self):
-        self.HomeLayout.stackedWidget_face.setCurrentIndex(self.HomeLayout.widget_map['page_face_task_management'])
+        self.label.setText("新建任务")
+        task = FaceTaskPage(self)
+        self.layoutPage(task)
 
-    def getTasksList(self):
-        self.http.do_get("/task/stream/query/all")
+    def layoutPage(self,page):
+        self.clearGridLayout()
+        self.gridLayout_main.addWidget(page, 0, 0, 1, 1)
+
+    def clearGridLayout(self):
+        count = self.gridLayout_main.count()
+        for i in range(count):
+            self.gridLayout_main.takeAt(i).widget().deleteLater()
+
 
 

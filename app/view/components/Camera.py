@@ -8,8 +8,8 @@ class Camera:
         self.label = label
         self.stopEvent = threading.Event()
         self.stopEvent.clear()
+        self.initSlot()
         print("进程pid:", os.getpid())
-
 
     def Open(self):
         print("open",self.url)

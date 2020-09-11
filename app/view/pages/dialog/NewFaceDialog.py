@@ -16,7 +16,10 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("添加摄像头")
+        self.setWindowTitle("添加人脸")
+        jpg = QPixmap("static/images/faceIcon.png")
+        self.label_image.setScaledContents(True)
+        self.label_image.setPixmap(jpg)
 
     def initSlot(self):
         self.buttonBox.accepted.connect(self.handleSubmit)
@@ -28,18 +31,20 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         fp = open(imgName, "rb")
         data = fp.read()
         self.label_image.setPixmap(jpg)
-        self.base64_image = "data:image/jpg;base64,"+str(base64.b64encode(data))[1:]
+        self.base64_image = str(base64.b64encode(data),"utf-8")
         self.handleDetectImage(self.base64_image)
 
     def handleSubmit(self):
         name = self.lineEdit_name.text()
         age = self.lineEdit_age.text()
         sex = self.lineEdit_sex.text()
+        tel = self.lineEdit_tel.text()
         params = {
             "name": name,
             "dataImage": self.base64_image,
             "age": age,
-            "sex": sex
+            "sex": sex,
+            "tel": tel
         }
 
         if(self.Error==False):
