@@ -31,6 +31,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         fp = open(imgName, "rb")
         data = fp.read()
         self.label_image.setPixmap(jpg)
+        self.origin_image = data
         self.base64_image = str(base64.b64encode(data),"utf-8")
         self.handleDetectImage(self.base64_image)
 
@@ -41,6 +42,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         tel = self.lineEdit_tel.text()
         params = {
             "name": name,
+            "origin_image":self.origin_image,
             "dataImage": self.base64_image,
             "age": age,
             "sex": sex,

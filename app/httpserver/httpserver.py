@@ -1,6 +1,9 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
+from sql.DBHelper import DBHelper
 
+dBHelper = DBHelper()
+dBHelper.create_notify_table()
 
 class Resquest(BaseHTTPRequestHandler):
     def handler(self):
@@ -25,11 +28,14 @@ class Resquest(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode())
 
     def do_POST(self):
-        #print(self.headers)
-        #print(self.command)
+        print("====" + self.requestline)
         req_datas = self.rfile.read(int(self.headers['content-length']))  # 重点在此步!
-        notify = req_datas.decode()
-        print(notify)
+        notify = json.loads(req_datas.decode())
+
+        if notify["command"] == 11:
+            dataHelper.save_notify(notify['data'])
+
+
         data = {
             'code': 0,
             'msg': 'ok'
@@ -38,3 +44,5 @@ class Resquest(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
+
+

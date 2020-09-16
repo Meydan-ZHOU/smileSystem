@@ -55,6 +55,9 @@
          </property>
          <item row="0" column="0">
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
@@ -102,8 +105,11 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <property name="spacing">
+         <property name="horizontalSpacing">
           <number>0</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
          </property>
          <item row="0" column="0">
           <widget class="QWidget" name="widget_5" native="true">
@@ -179,6 +185,15 @@
             </property>
             <item row="0" column="0">
              <widget class="QScrollArea" name="scrollArea">
+              <property name="autoFillBackground">
+               <bool>true</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="lineWidth">
+               <number>0</number>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -188,8 +203,11 @@
                  <x>0</x>
                  <y>0</y>
                  <width>994</width>
-                 <height>651</height>
+                 <height>645</height>
                 </rect>
+               </property>
+               <property name="autoFillBackground">
+                <bool>true</bool>
                </property>
                <layout class="QGridLayout" name="gridLayout_7">
                 <property name="leftMargin">
@@ -209,6 +227,18 @@
                 </property>
                 <item row="0" column="1">
                  <widget class="QListWidget" name="listWidget_face">
+                  <property name="autoFillBackground">
+                   <bool>true</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="lineWidth">
+                   <number>0</number>
+                  </property>
+                  <property name="autoScrollMargin">
+                   <number>0</number>
+                  </property>
                   <property name="itemAlignment">
                    <set>Qt::AlignCenter</set>
                   </property>

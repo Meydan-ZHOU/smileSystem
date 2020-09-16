@@ -5,7 +5,7 @@ _http = HttpClient()
 #获取人脸库列表
 def get_librarys():
     #print("get_librarys/library/")
-    back =  _http.do_get("/library")
+    back = _http.do_get("/library")
     #print("get_librarys back", back.json())
     return back
 
@@ -53,28 +53,28 @@ def add_library(params):
 
 #添加单个人脸
 def add_face(params):
-    print("add_face",params)
+    #print("add_face",params)
     back = _http.do_post('/face/new', params)
     print("add_face back", back.json())
     return back
 
 #检测人脸照片质量
 def detectImage(params):
-    print("detectImage", params)
+    #print("detectImage", params)
     back = _http.do_post('/face/detect', params)
     print("detectImage back", back.json())
     return back
 
 #获取任务id列表
 def get_tasks_list():
-    print("get_tasks_list/task/stream/query/")
+    #print("get_tasks_list/task/stream/query/")
     back = _http.do_get("/task/stream/query/all")
-    print("get_tasks_list back", back.json())
+    #print("get_tasks_list back", back.json())
     return back
 
 #获取单个任务详情
 def get_task_info_list(task_id):
-    print("get_task_info_list","/task/stream/query/"+task_id)
+    #print("get_task_info_list","/task/stream/query/"+task_id)
     back = _http.do_get("/task/stream/query/"+task_id)
     #print("get_task_info_list back", back.json())
     return back

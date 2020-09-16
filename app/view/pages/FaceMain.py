@@ -2,9 +2,9 @@ from PyQt5.QtWidgets import *
 from ui.FaceMainUI import Ui_Form
 from api.index import get_tasks_list,get_task_info_list,get_library_by_id,stopTask
 import time,threading
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal,QThread
 from utils.common import msg_box
-import json
+from utils.common import SYS_STYLE_COMMON
 
 class FaceMainPage(Ui_Form,QWidget):
     update_table_list_ui = pyqtSignal(dict)
@@ -13,19 +13,37 @@ class FaceMainPage(Ui_Form,QWidget):
         self.setupUi(self)
         self.HomeLayout = HomeLayout
         print("人脸主页面----------------------------------")
+        self.stopEvent = threading.Event()
+        self.stopEvent.clear()
+        self.dataFlag = True
         self.initSlot()
-        self.initData()
+        self.initTable()
+        self.updateData()
+
+    def initUI(self):
+        self.setStyleSheet(SYS_STYLE_COMMON)
+
+    def handleDestroy(self):
+        print("我被销毁了")
+
+    def updateData(self):
+        th = threading.Thread(target=self.initData)
+        th.start()
 
     def initSlot(self):
         self.update_table_list_ui.connect(self.updateTableListUI)
 
     def initData(self):
-        self.taskIdList = []
-        self.taskInfoList = []
-        self.initTable()
-        th = threading.Thread(target=self.getTasksList)
-        th.start()
-        th.join()
+        while self.dataFlag:
+            try:
+                self.taskIdList = []
+                self.taskInfoList = []
+                self.getTasksList()
+                QApplication.processEvents()
+                time.sleep(5)
+            except Exception:
+                self.dataFlag = False
+                print("发生异常",threading.get_ident())
 
     def getTaskInfoList(self):
         taskId = self.taskIdList
@@ -37,7 +55,6 @@ class FaceMainPage(Ui_Form,QWidget):
                 new_data = data.get('data')
                 new_data["task_id"] = id
                 self.taskInfoList.append(new_data)
-        print("len(self.taskInfoList)", len(self.taskInfoList))
         self.formatData(self.taskInfoList)
 
     def formatData(self,tasks):
@@ -88,36 +105,44 @@ class FaceMainPage(Ui_Form,QWidget):
                 task_all_dic[task_id] = {
                     "library_dict": library_dict,
                     "cameras_dict": cameras_dict,
-                    "server":server
+                    "server":server,
                 }
-        print("task_all_dic", task_all_dic)
         self.update_table_list_ui.emit(task_all_dic)
 
     def initTable(self):
         tableWidget = self.tableWidget
         tableWidget.clear()
-        tableWidget.setColumnCount(6)
-        tableWidget.setHorizontalHeaderLabels(["摄像头地址", "人脸库", "相似度", "状态","报警地址","操作"])
+        tableWidget.setColumnCount(7)
+        tableWidget.setHorizontalHeaderLabels(["序号","摄像头地址", "状态", "人脸库", "相似度","报警地址","操作"])
         font = tableWidget.horizontalHeader().font()
         font.setBold(True)
         tableWidget.horizontalHeader().setFont(font)
-        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        tableWidget.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
-        tableWidget.resizeRowsToContents()
-        tableWidget.resizeColumnsToContents()
+        tableWidget.setAlternatingRowColors(True)
+        self.resizeTable(tableWidget)
+
 
     def updateTableListUI(self,tasks_dict):
         print("len(tasks_dict)",len(tasks_dict))
         tableWidget = self.tableWidget
         tableWidget.clearContents()
         tableWidget.setRowCount(len(tasks_dict))
+        print("tasks_dict", tasks_dict)
         for i,task_id in enumerate(tasks_dict):
             task = tasks_dict[task_id]
+            server = task['server']
+            library_dict = task['library_dict']
             cameras_dict = task['cameras_dict']
             cameras_list = {}
             libs_list = {}
             running_list = {}
+            similarity_list = {}
+            for index,lib_id in enumerate(library_dict):
+                lib = library_dict[lib_id]
+                if(similarity_list.get(index)==None):
+                    similarity_list[index] = [lib.get('name'),lib.get('similarity')]
+
             for index,url in enumerate(cameras_dict):
                 camera = cameras_dict[url]
                 running = self.getStatusText(camera['running'])
@@ -126,80 +151,63 @@ class FaceMainPage(Ui_Form,QWidget):
                 libs_list[index] = lib_names
                 cameras_list[index] = url
 
-
-            widget = self.getListWidget(cameras_list)
-            tableWidget.setCellWidget(i, 0, widget)
-            widget = self.getListWidget(libs_list)
+            widget = QTableWidgetItem(str(i+1))
+            tableWidget.setItem(i, 0, widget)
+            widget = self.getItemWidget(cameras_list)
             tableWidget.setCellWidget(i, 1, widget)
-            widget = self.getListWidget(libs_list)
-            tableWidget.setCellWidget(i, 2, widget)
-            widget = self.getListWidget(running_list)
+            widget = self.getItemWidget(libs_list)
             tableWidget.setCellWidget(i, 3, widget)
+            widget = self.getItemWidget(similarity_list)
+            tableWidget.setCellWidget(i, 4, widget)
+            widget = self.getItemWidget(running_list)
+            tableWidget.setCellWidget(i, 2, widget)
+            widget = QTableWidgetItem(server)
+            tableWidget.setItem(i, 5, widget)
+            widget = QWidget()
+            h = QHBoxLayout()
             btn_del = QPushButton()
             btn_del.setText("删除")
-            btn_del.setFixedSize(80,25)
+            btn_del.setFixedSize(50,25)
             btn_del.setProperty("task_id",task_id)
             btn_del.clicked.connect(self.handleDeleteTask)
-            tableWidget.setCellWidget(i,5,btn_del)
+            btn_show = QPushButton()
+            btn_show.setText("查看")
+            btn_show.setFixedSize(50, 25)
+            btn_show.setProperty("task_id", task_id)
+            btn_show.clicked.connect(self.goTaskDetectPage)
+            h.addWidget(btn_del)
+            h.addWidget(btn_show)
+            widget.setLayout(h)
+            tableWidget.setCellWidget(i,6,widget)
+            self.resizeTable(tableWidget)
 
-        task_all_dic = {}
+    def resizeTable(self,tableWidget):
+        # tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        tableWidget.resizeRowsToContents()
+        tableWidget.resizeColumnsToContents()
+        tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        tableWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        tableWidget.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        tableWidget.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        tableWidget.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeToContents)
 
-        #     for cams in cameras:
-        #         libs_arr = []
-        #         cameras_arr = []
-        #         running_arr = []
-        #         lib_id_arr = cams["face_lib_ids"]
-        #         for lib_id in lib_id_arr:
-        #             res = get_library_by_id(lib_id)
-        #             data = res.json()
-        #             if(res.status_code==200):
-        #                 lib_name = data.get("name")
-        #                 libs_arr.append(lib_name)
-        #                 for lib in libraries:
-        #                     similarity_arr = []
-        #                     if(lib["face_lib_id"]==lib_id):
-        #                         similarity_arr.append(lib_name)
-        #                         similarity_arr.append(lib["similarity_threshold"])
-        #                         if(similarity_all_str.find(str(similarity_arr))==-1):
-        #                             similarity_all_str = similarity_all_str + str(similarity_arr)
-        #
-        #         for stats in status:
-        #             if(stats["camera"]==cams["url"]):
-        #                 running = stats["running"]
-        #                 if running ==1:
-        #                     run_text="运行中"
-        #                 else:
-        #                     run_text = "异常"
-        #                 cameras_arr.append(cams["url"])
-        #                 running_arr.append(run_text)
-        #
-        #         libs_all_str = libs_all_str + str(libs_arr)
-        #         cameras_all_str = cameras_all_str + str(cameras_arr)
-        #         running_all_str = running_all_str + str(running_arr)
-        #
-        #     newItem = QTableWidgetItem(cameras_all_str)
-        #     tableWidget.setItem(i, 0, newItem)
-        #     newItem = QTableWidgetItem(str(libs_all_str))
-        #     tableWidget.setItem(i, 1, newItem)
-        #     newItem = QTableWidgetItem(server)
-        #     tableWidget.setItem(i, 2, newItem)
-        #     label = QLabel(running_all_str)
-        #     tableWidget.setCellWidget(i, 3, label)
-        #     newItem = QTableWidgetItem(similarity_all_str)
-        #     tableWidget.setItem(i, 4, newItem)
-        #
 
-    def getListWidget(self,lists):
-        listWidget = QListWidget()
-        listWidget.clear()
-        print("lists", lists)
+    def getItemWidget(self,lists):
+        widget = QWidget()
+        v = QVBoxLayout()
+        v.setSpacing(10)
         for index in lists:
+            label = QLabel()
             item = lists[index]
-            print("index",item)
-            listWidget.addItem(str(item))
+            label.setText(str(item))
+            v.addWidget(label)
+        widget.setLayout(v)
+        return widget
 
-        return listWidget
-
+    def goTaskDetectPage(self):
+        task_id = self.sender().property('task_id')
+        self.HomeLayout.goFaceTaskNotify(task_id)
 
     def getStatusText(self,num):
         if(num==0):

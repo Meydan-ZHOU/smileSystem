@@ -6,6 +6,9 @@ from view.components.Camera import Camera
 import time
 from utils.common import CAMERA_LIST
 from utils.common import msg_box
+from utils.common import SYS_STYLE_COMMON
+
+import socket
 
 class FaceTaskPage(Ui_Form,QWidget):
     def __init__(self, HomeLayout, parent=None):
@@ -13,10 +16,23 @@ class FaceTaskPage(Ui_Form,QWidget):
         self.setupUi(self)
         self.HomeLayout = HomeLayout
         print("新建人脸任务------------------------------------------------")
+        self.hostIp = self.getHostIP()
         self.initData()
         self.getLibraryList()
-        print(self.libraryCamera)
         self.destroyed.connect(self.handleDestroy)
+
+    def initUI(self):
+        self.setStyleSheet(SYS_STYLE_COMMON)
+
+    def getHostIP(self):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(('8.8.8.8', 80))
+            ip = s.getsockname()[0]
+        finally:
+            s.close()
+
+        return ip
 
     def handleDestroy(self):
         print("新建任务被销毁了")
@@ -69,7 +85,6 @@ class FaceTaskPage(Ui_Form,QWidget):
 
     def removeAllList(self):
         count = self.listWidget_camera.children()
-        print(count)
 
     def cameraCheckedChanged(self):
         camera = self.sender().property('data')
@@ -84,9 +99,10 @@ class FaceTaskPage(Ui_Form,QWidget):
         res = get_librarys()
         if res.status_code == 200:
             self.libraryList = res.json()
-            self.currentLibrary = self.libraryList[0]
-            self.initComboboxUI(self.libraryList)
-            self.initCameraListUI()
+            if(type(self.libraryList)==list):
+                self.currentLibrary = self.libraryList[0]
+                self.initComboboxUI(self.libraryList)
+                self.initCameraListUI()
         else:
             self.libraryList = []
             self.currentLibrary = {}
@@ -102,7 +118,6 @@ class FaceTaskPage(Ui_Form,QWidget):
             }
         comboBox.setCurrentIndex(0)
         comboBox.currentIndexChanged.connect(self.faceLibraryChanged)
-        print(self.libraryCamera)
 
     def faceLibraryChanged(self,i):
         self.currentLibrary = self.comboBox_face_libray.itemData(i)
@@ -166,7 +181,7 @@ class FaceTaskPage(Ui_Form,QWidget):
                 "libraries":libs_arr
             },
             "notify": {
-                "server": "http://localhost:3000"
+                "server": "http://"+self.hostIp+":9002"
             }
         }
 

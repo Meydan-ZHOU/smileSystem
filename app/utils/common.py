@@ -22,6 +22,8 @@ def newGridLayout(pageWrapper,page):
 
 SYS_STYLE_LOGIN = CommonHelper.readQSS("./static/style/login.qss")
 SYS_STYLE_HOME = CommonHelper.readQSS("./static/style/home.qss")
+SYS_STYLE_COMMON = CommonHelper.readQSS("./static/style/common.qss")
+
 CAMERA_LIST = [
             {
                 "name": "摄像头1",
@@ -37,5 +39,10 @@ CAMERA_LIST = [
                 "name": "摄像头3",
                 "ip": "172.16.29.100",
                 "url": "rtsp://admin:admin123@172.16.29.100:554"
+            },
+            {
+                "name": "摄像头4",
+                "ip": "172.16.15.32",
+                "url": "rtsp://172.16.15.32:554/wenrui-test"
             },
         ]

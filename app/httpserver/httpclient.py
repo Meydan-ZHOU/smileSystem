@@ -6,11 +6,18 @@ class HttpClient(object):
         super(HttpClient,self).__init__()
 
     def do_post(self, url, params=None):
-        res = requests.post(SYS_HOST+url, json=params)
-        return res
+        try:
+            res = requests.post(SYS_HOST+url, json=params)
+            return res
+        except (ConnectionError,):
+            print('Crawling Failed', url)
+            return None
 
     def do_get(self,url,params=None):
-        res = requests.get(SYS_HOST+url, params=params)
-        return res
-
+        try:
+            res = requests.get(SYS_HOST+url, params=params)
+            return res
+        except (ConnectionError):
+            print('Crawling Failed', url)
+            return None
 

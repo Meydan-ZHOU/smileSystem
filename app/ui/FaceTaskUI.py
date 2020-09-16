@@ -88,7 +88,7 @@ class Ui_Form(object):
         self.label_3.setObjectName("label_3")
         self.verticalLayout_2.addWidget(self.label_3)
         self.label_camera = QtWidgets.QLabel(self.widget_4)
-        self.label_camera.setStyleSheet("border:1px solid #eee;")
+        self.label_camera.setStyleSheet("")
         self.label_camera.setAlignment(QtCore.Qt.AlignCenter)
         self.label_camera.setObjectName("label_camera")
         self.verticalLayout_2.addWidget(self.label_camera)
