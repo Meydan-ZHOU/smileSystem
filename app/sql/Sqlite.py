@@ -81,10 +81,10 @@ class ConnectSqlite:
             war_msg = self._time_now + ' The [{}] is empty or equal None!'.format(sql)
             if limit_flag is True:
                 r = self._cur.fetchall()
-                return r if len(r) > 0 else war_msg
+                return r
             elif limit_flag is False:
                 r = self._cur.fetchone()
-                return r if len(r) > 0 else war_msg
+                return r
         except Exception as e:
             print(self._time_now, "[SELECT TABLE ERROR]", e)
 

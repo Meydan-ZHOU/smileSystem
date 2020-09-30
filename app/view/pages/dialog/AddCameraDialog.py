@@ -1,23 +1,61 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSignal
 from ui.AddCameraDialogUI import Ui_Dialog
 
 
 class AddCameraDialog(Ui_Dialog, QDialog):
-    def __init__(self):
+    submit_button_click = pyqtSignal(dict)
+    delete_button_click = pyqtSignal(str)
+    def __init__(self,Data=None):
         super(AddCameraDialog, self).__init__()
         self.setupUi(self)
+        self.Data = Data
         self.initSlot()
         self.initUI()
+        self.initData()
 
     def initUI(self):
-        self.setWindowTitle("添加摄像头")
+        if(self.Data == None):
+            self.setWindowTitle("添加摄像头")
+            self.pushButton_cancel.setText('Cancel')
+        else:
+            self.setWindowTitle("编辑摄像头")
+            self.pushButton_cancel.setText('Delete')
+
+    def initData(self):
+        data = self.Data
+        if(data==None):
+            return
+        name, ip, sn, username, password, url = data
+        self.lineEdit_name.setText(name)
+        self.lineEdit_ip.setText(ip)
+        self.lineEdit_ip.setDisabled(True)
+        self.lineEdit_sn.setText(sn)
+        self.lineEdit_sn.setDisabled(True)
+        self.lineEdit_username.setText(username)
+        self.lineEdit_password.setText(password)
+        self.lineEdit_url.setText(url)
 
     def initSlot(self):
-        self.buttonBox.accepted.connect(self.handleSubmit)
-        self.buttonBox.rejected.connect(self.handleCancel)
+        self.pushButton_submit.clicked.connect(self.handleSubmit)
+        self.pushButton_cancel.clicked.connect(self.handleCancel)
 
     def handleSubmit(self):
-        print("提交操作")
+        camera = {
+            "name":self.lineEdit_name.text(),
+            "ip":self.lineEdit_ip.text(),
+            "sn":self.lineEdit_sn.text(),
+            "username":self.lineEdit_username.text(),
+            "password":self.lineEdit_password.text(),
+            "url":self.lineEdit_url.text(),
+        }
+        self.submit_button_click.emit(camera)
+        self.accept()
 
     def handleCancel(self):
-        print("取消操作")
+        if (self.Data == None):
+            self.reject()
+            return
+        ip = self.lineEdit_ip.text()
+        self.delete_button_click.emit(ip)
+        self.reject()

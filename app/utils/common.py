@@ -1,4 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox,QGridLayout
+from PyQt5.QtGui import QPixmap
+import os,sys
+dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
 
 class CommonHelper:
     @staticmethod
@@ -9,40 +12,34 @@ class CommonHelper:
 def msg_box(widget,str):
     QMessageBox.warning(widget, "提示",str, QMessageBox.Yes | QMessageBox.No)
 
-def newGridLayout(pageWrapper,page):
-    grid = QGridLayout()
-    count = grid.count()
-    for i in range(count):
-        grid.takeAt(i).widget().deleteLater()
-    grid.addWidget(page,0,0,1,1)
-    pageWrapper.setLayout(grid)
-    print("pageWrapper CHILDREN", pageWrapper.children())
+def displayOriginImage(label,imagePath,width=None,height=None):
+    jpg1 = QPixmap(imagePath)
+    h=0
+    w=0
+    if(not width==None):
+        w = width
+        rate = jpg1.width() / w
+        h = jpg1.height() / rate
 
+    if (not height == None):
+        jpg1 = QPixmap(imagePath)
+        h = height
+        rate = jpg1.height() / h
+        w = jpg1.width() / rate
+
+
+    if(h>150):
+        h=150
+
+    if (not width == None and not height == None):
+        w= width
+        h= height
+
+    label.setFixedWidth(w)
+    label.setFixedHeight(h)
+    label.setPixmap(jpg1)
+    label.setScaledContents(True)
 
 
 SYS_STYLE_LOGIN = CommonHelper.readQSS("./static/style/login.qss")
-SYS_STYLE_HOME = CommonHelper.readQSS("./static/style/home.qss")
 SYS_STYLE_COMMON = CommonHelper.readQSS("./static/style/common.qss")
-
-CAMERA_LIST = [
-            {
-                "name": "摄像头1",
-                "ip": "172.16.134.134",
-                "url": "rtsp://admin:admin123@172.16.134.134:554"
-            },
-            {
-                "name": "摄像头2",
-                "ip": "172.16.233.100",
-                "url": "rtsp://admin:admin123@172.16.233.100:554"
-            },
-            {
-                "name": "摄像头3",
-                "ip": "172.16.29.100",
-                "url": "rtsp://admin:admin123@172.16.29.100:554"
-            },
-            {
-                "name": "摄像头4",
-                "ip": "172.16.15.32",
-                "url": "rtsp://172.16.15.32:554/wenrui-test"
-            },
-        ]

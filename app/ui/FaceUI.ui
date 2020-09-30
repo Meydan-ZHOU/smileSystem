@@ -44,7 +44,10 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="pushButton_face_back">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string>人脸识别</string>
           </property>
@@ -91,12 +94,24 @@
           <property name="text">
            <string>新建任务</string>
           </property>
+          <property name="class" stdset="0">
+           <string>primary</string>
+          </property>
+          <property name="sizeBtn" stdset="0">
+           <string>medium</string>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_3">
           <property name="text">
            <string>人脸管理</string>
+          </property>
+          <property name="class" stdset="0">
+           <string>primary</string>
+          </property>
+          <property name="sizeBtn" stdset="0">
+           <string>medium</string>
           </property>
          </widget>
         </item>
@@ -106,6 +121,21 @@
      <item row="1" column="0">
       <widget class="QWidget" name="widget_bottom" native="true">
        <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_main"/>
         </item>
@@ -151,7 +181,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>pushButton_face_back</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>goFaceMain()</slot>

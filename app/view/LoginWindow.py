@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from ui.LoginUI import Ui_Form_login
 from view.HomeLayout import HomeWindow
 from utils.common import SYS_STYLE_LOGIN
-from PyQt5.QtGui import QPainter, QPixmap
+from view.components.Header import Header
 
 
 class LoginWindow(Ui_Form_login,QWidget):
@@ -19,11 +19,11 @@ class LoginWindow(Ui_Form_login,QWidget):
 
     def initUI(self):
         self.setStyleSheet(SYS_STYLE_LOGIN)
+        self.initHeader()
 
-    def setBackgroundImage(self):
-        painter = QPainter(self)
-        pixmap = QPixmap("../static/images/bg.png")
-        painter.drawPixmap(self.rect(), pixmap)
+    def initHeader(self):
+        header = Header(self)
+        self.horizontalLayout.addWidget(header)
 
     def initSlot(self):
         self.login_btn.clicked.connect(self.doLogin)

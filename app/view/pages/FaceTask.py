@@ -1,14 +1,15 @@
-from PyQt5.QtWidgets import *
-from ui.FaceTaskUI import Ui_Form
-from api.index import get_librarys,newTask
-from PyQt5.QtCore import QSize,Qt
-from view.components.Camera import Camera
-import time
-from utils.common import CAMERA_LIST
-from utils.common import msg_box
-from utils.common import SYS_STYLE_COMMON
-
 import socket
+
+from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QCheckBox,QLabel,QToolButton
+from ui.FaceTaskUI import Ui_Form
+from PyQt5.QtCore import QSize,Qt
+
+from view.components.Video import Video
+
+from api.index import newTask
+from utils.common import msg_box
+
+from sql.DBHelper import DBHelper
 
 class FaceTaskPage(Ui_Form,QWidget):
     def __init__(self, HomeLayout, parent=None):
@@ -16,13 +17,15 @@ class FaceTaskPage(Ui_Form,QWidget):
         self.setupUi(self)
         self.HomeLayout = HomeLayout
         print("新建人脸任务------------------------------------------------")
+        self.dbHelper = DBHelper()
         self.hostIp = self.getHostIP()
+        self.initUI()
         self.initData()
         self.getLibraryList()
-        self.destroyed.connect(self.handleDestroy)
+        self.getAllCameraList()
 
     def initUI(self):
-        self.setStyleSheet(SYS_STYLE_COMMON)
+        self.init_camera()
 
     def getHostIP(self):
         try:
@@ -31,20 +34,24 @@ class FaceTaskPage(Ui_Form,QWidget):
             ip = s.getsockname()[0]
         finally:
             s.close()
-
         return ip
 
-    def handleDestroy(self):
-        print("新建任务被销毁了")
+    def getAllCameraList(self):
+        db_back = self.dbHelper.select_all_camera()
+        self.cameraList = db_back
+        self.updateCameraListUI()
 
     def initData(self):
-        self.cameraList = CAMERA_LIST
-        self.libraryList = []
-        self.currentLibrary = {}
+        self.cameraList = []
+        self.libraryList = None
+        self.currentLibrary = None
         self.libraryCamera = {}
 
     def libraryHasCamera(self,camera_url):
-        cameras = self.libraryCamera[self.currentLibrary['face_lib_id']]['cameras']
+        if(self.currentLibrary==None):
+            return False
+        lib_name,lib_id = self.currentLibrary
+        cameras = self.libraryCamera[lib_id]['cameras']
         for item in cameras:
             if(item == camera_url):
                 return True
@@ -52,98 +59,106 @@ class FaceTaskPage(Ui_Form,QWidget):
                 return False
         return False
 
-    def initCameraListUI(self):
+    def updateCameraListUI(self):
         self.listWidget_camera.clear()
         for camera in self.cameraList:
+            name, ip, sn, username, password, url = camera
             item = QListWidgetItem()  # 创建QListWidgetItem对象
             item.setData(0, camera)
             item.setSizeHint(QSize(150, 50))
             # 总widget
             widget = QWidget()
             # 总的横向布局
-            layout_main = QHBoxLayout()
+            h = QHBoxLayout()
             cb = QCheckBox()
-            status = self.libraryHasCamera(camera['url'])
-            print(status)
+            status = self.libraryHasCamera(url)
             cb.setChecked(status)
-            cb.setProperty("data",camera)
+            cb.setProperty("url",url)
             cb.stateChanged.connect(self.cameraCheckedChanged)
             label = QLabel()
-            label.setText(camera['ip'])
-            layout_main.setAlignment(Qt.AlignLeft|Qt.AlignHCenter)
+            label.setText(name)
+            h.setAlignment(Qt.AlignLeft|Qt.AlignHCenter)
             btn = QToolButton()
             btn.setText("播放")
-            btn.setProperty("data",camera)
+            btn.setProperty("data",(url,name))
             btn.clicked.connect(self.handleCameraClicked)
             # 摄像头编辑按钮
-            layout_main.addWidget(cb)
-            layout_main.addWidget(label)
-            layout_main.addWidget(btn)
-            widget.setLayout(layout_main)
+            h.addWidget(cb)
+            h.addWidget(label)
+            h.addWidget(btn)
+            h.setStretch(1,2)
+            widget.setLayout(h)
             self.listWidget_camera.addItem(item)
             self.listWidget_camera.setItemWidget(item, widget)
 
-    def removeAllList(self):
-        count = self.listWidget_camera.children()
-
     def cameraCheckedChanged(self):
-        camera = self.sender().property('data')
-        current_lib_id = self.currentLibrary.get('face_lib_id')
+        lib_name, lib_id = self.currentLibrary
+        url = self.sender().property('url')
         if(self.sender().checkState()==0):
-            self.libraryCamera[current_lib_id]['cameras'].remove(camera['url'])
+            self.libraryCamera[lib_id]['cameras'].remove(url)
         else:
-            self.libraryCamera[current_lib_id]['cameras'].add(camera['url'])
-
+            self.libraryCamera[lib_id]['cameras'].add(url)
 
     def getLibraryList(self):
-        res = get_librarys()
-        if res.status_code == 200:
-            self.libraryList = res.json()
-            if(type(self.libraryList)==list):
+        db_back = self.dbHelper.select_all_library()
+        if (db_back):
+            self.libraryList = db_back
+            if len(self.libraryList) > 0:
                 self.currentLibrary = self.libraryList[0]
-                self.initComboboxUI(self.libraryList)
-                self.initCameraListUI()
+            else:
+                self.currentLibrary = None
         else:
             self.libraryList = []
-            self.currentLibrary = {}
+            self.currentLibrary = None
 
-    def initComboboxUI(self,data):
+        self.updateLibraryComboboxUI(self.libraryList)
+        self.updateCameraListUI()
+
+
+    def updateLibraryComboboxUI(self,library):
         comboBox = self.comboBox_face_libray
-        for index,obj in enumerate(data):
-            comboBox.addItem(obj.get('face_lib_name'))
-            comboBox.setItemData(index,obj)
-            self.libraryCamera[obj.get('face_lib_id')] = {
-                "cameras": set(),
-                "similarity":float(self.doubleSpinBox_similarity.text())
-            }
+        for index,lib in enumerate(library):
+            lib_name,lib_id = lib
+            comboBox.addItem(lib_name)
+            comboBox.setItemData(index,lib)
+            if self.libraryCamera.get(lib_id)==None:
+                self.libraryCamera[lib_id] = {
+                    "cameras": set(),
+                    "similarity": float(self.doubleSpinBox_similarity.text())
+                }
         comboBox.setCurrentIndex(0)
         comboBox.currentIndexChanged.connect(self.faceLibraryChanged)
 
     def faceLibraryChanged(self,i):
         self.currentLibrary = self.comboBox_face_libray.itemData(i)
-        self.initCameraListUI()
+        self.updateCameraListUI()
         self.initOtherSettting()
 
     def goFacePage(self):
         self.HomeLayout.stackedWidget_face.setCurrentIndex(self.HomeLayout.widget_map['page_face'])
 
-    def init_camera(self,url):
+    def init_camera(self):
         """初始化摄像头监控"""
-        Camera(url, self.label_camera).Open()
+        self.video = Video()
+        self.horizontalLayout_video.addWidget(self.video)
 
     def handleCameraClicked(self):
-        url = self.sender().property('data')['url']
-        self.init_camera(url)
+        url,name = self.sender().property('data')
+        print(url, name)
+        print(self.widget_task_video.size())
+        self.video.Open(url,name)
 
     def smilarityChanged(self):
-        library = self.libraryCamera[self.currentLibrary['face_lib_id']]
-        similaity = float(self.doubleSpinBox_similarity.text())
-        library['similarity'] = similaity
+        lib_name, lib_id = self.currentLibrary
+        library = self.libraryCamera[lib_id]
+        similarity = float(self.doubleSpinBox_similarity.text())
+        library['similarity'] = similarity
 
     def initOtherSettting(self):
-        library = self.libraryCamera[self.currentLibrary['face_lib_id']]
-        similaity = library['similarity']
-        self.doubleSpinBox_similarity.setValue(similaity)
+        lib_name, lib_id = self.currentLibrary
+        library = self.libraryCamera[lib_id]
+        similarity = library['similarity']
+        self.doubleSpinBox_similarity.setValue(similarity)
 
     def handleSubmit(self):
         print("submit",self.libraryCamera)
@@ -175,6 +190,14 @@ class FaceTaskPage(Ui_Form,QWidget):
             }
             camera_arr.append(item)
 
+        if(len(camera_arr)==0):
+            msg_box(self,"摄像头不能为空")
+            return
+
+        if(len(libs_arr)==0):
+            msg_box(self,"人脸库不能为空")
+            return 
+
         params = {
             "task":{
                 "cameras":camera_arr,
@@ -186,12 +209,13 @@ class FaceTaskPage(Ui_Form,QWidget):
         }
 
         res = newTask(params)
-        data = res.json()
-        if(res.status_code==200 and data.get('code')==0):
-            msg_box(self,"操作成功")
-            self.HomeLayout.goFaceMain()
-        else:
-            msg_box(self,data.get("msg"))
+        if res:
+            data = res.json()
+            if(res.status_code==200 and data.get('code')==0):
+                msg_box(self,"操作成功")
+                self.HomeLayout.goFaceMain()
+            else:
+                msg_box(self,data.get("msg"))
 
     def handleCancel(self):
         self.getLibraryList()

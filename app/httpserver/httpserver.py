@@ -2,8 +2,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 from sql.DBHelper import DBHelper
 
-dBHelper = DBHelper()
-dBHelper.create_notify_table()
+dbHelper = DBHelper()
+dbHelper.create_notify_table()
 
 class Resquest(BaseHTTPRequestHandler):
     def handler(self):
@@ -30,11 +30,35 @@ class Resquest(BaseHTTPRequestHandler):
     def do_POST(self):
         print("====" + self.requestline)
         req_datas = self.rfile.read(int(self.headers['content-length']))  # 重点在此步!
-        notify = json.loads(req_datas.decode())
+        jsonData = json.loads(req_datas.decode())
+        notify = jsonData['data']
+        command = jsonData['command']
 
-        if notify["command"] == 11:
-            dataHelper.save_notify(notify['data'])
+        face_id = notify["face_id"]
+        # 获取注册个人头像
+        db_back = dbHelper.select_single_face(face_id)
+        if (len(db_back) > 0):
+            face = db_back[0]
+            notify['register_image'] = face[4]
+            notify['face_name'] = face[3]
 
+        #获取人脸库名字
+        face_lib_id = notify["face_lib_id"]
+        db_back = dbHelper.select_single_library(face_lib_id)
+        if (len(db_back) > 0):
+            lib = db_back[0]
+            notify['face_lib_name'] = lib[0]
+
+        # 获取摄像头名字
+        camera_url = notify['camera_url']
+        db_back = dbHelper.select_camera_by_url(camera_url)
+        if (len(db_back) > 0):
+            camera = db_back[0]
+            print(camera[0], "camera_name")
+            notify['camera_name'] = camera[0]
+
+        if command == 11:
+            dbHelper.insert_notify(notify)
 
         data = {
             'code': 0,

@@ -55,6 +55,16 @@ class Example(QtWidgets.QWidget):
     def call_backlog(self, msg):
         self.pbar.setValue(int(msg))  # 将线程的参数传入进度条
 
+    # def updateData(self):
+    #     self.getNotifyDatas()
+    #     try:
+    #         self.th = threading.Timer(5,self.updateData)
+    #         self.th.setDaemon(True)
+    #         self.th.start()
+    #     except Exception:
+    #         print("定时器关闭")
+    #         self.th.cancel()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
