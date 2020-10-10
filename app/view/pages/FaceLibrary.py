@@ -9,6 +9,7 @@ from api.index import add_library,add_face, del_faces, delete_library
 from utils.common import msg_box
 
 from view.components.ScrollWrapper import ScrollWrapper
+from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
 
@@ -23,12 +24,40 @@ class FaceLibraryPage(Ui_Form,QWidget):
         self.currentLibrary = None
         self.initUI()
         self.dbHelper = DBHelper()
+        self.totalCount = 0
+        self.pageSize = 12
+        self.currentPage = 1
         self.createTable()
         self.getLibraryList()
-        self.count=0
+
+    def resizeEvent(self, event):
+        width = self.size().width()
+        print("width", width)
+        if (width > 1200):
+            self.pageSize = 16
+        else:
+            self.pageSize = 12
+
+        self.getAllFacesList()
 
     def initUI(self):
         self.pushButton.setProperty('class', 'addButton')
+
+    def getFaceTotalCount(self):
+        self.totalCount = self.dbHelper.query_face_table_count()
+
+    def updatePaginationUI(self):
+        count = self.horizontalLayout_pagination.count()
+        for i in range(count):
+            self.horizontalLayout_pagination.takeAt(i).widget().deleteLater()
+
+        pagination = Pagination(self.totalCount, self.pageSize, self.currentPage)
+        pagination.current_page_change.connect(self.handleCurrentPageChange)
+        self.horizontalLayout_pagination.addWidget(pagination)
+
+    def handleCurrentPageChange(self,page):
+        self.currentPage = page
+        self.getAllFacesList()
 
     def createTable(self):
         self.dbHelper.create_face_table()
@@ -38,13 +67,21 @@ class FaceLibraryPage(Ui_Form,QWidget):
         self.HomeLayout.stackedWidget_face.setCurrentIndex(self.HomeLayout.widget_map['page_face'])
 
     def getAllFacesList(self):
+        self.getFaceTotalCount()
         print("self.currentLibrary", self.currentLibrary)
         if self.currentLibrary == None:
             self.faceList = []
         else:
             lib_name, lib_id = self.currentLibrary
-            self.faceList = self.dbHelper.select_all_face(lib_id)
+            params = {
+                'id':lib_id,
+                'size': self.pageSize,
+                'start': (self.currentPage - 1) * self.pageSize
+            }
+            self.faceList = self.dbHelper.select_all_face(params)
+            print(self.faceList)
 
+        self.updatePaginationUI()
         self.updateFaceListUI(self.faceList)
 
     def submitAddLibrary(self,libraryName):

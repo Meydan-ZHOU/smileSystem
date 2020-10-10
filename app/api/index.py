@@ -5,7 +5,7 @@ _http = HttpClient()
 #获取app版本详情信息
 def getAppInfo():
     try:
-        back = _http.do_get("/system/software")
+        back = _http.do_get("/system/software",None,1)
         if back:
             print("getAppInfo back", back.json())
         return back
@@ -113,7 +113,8 @@ def detectImage(params):
         # print("detectImage", params)
         back = _http.do_post('/face/detect', params)
         if back:
-            print("detectImage back", back.json())
+            pass
+            #print("detectImage back", back.json())
         return back
     except ConnectionError:
         print("检测人脸照片质量接口连接错误！", ConnectionError)

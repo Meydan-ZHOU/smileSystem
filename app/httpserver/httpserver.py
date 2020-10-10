@@ -37,25 +37,25 @@ class Resquest(BaseHTTPRequestHandler):
         face_id = notify["face_id"]
         # 获取注册个人头像
         db_back = dbHelper.select_single_face(face_id)
-        if (len(db_back) > 0):
-            face = db_back[0]
-            notify['register_image'] = face[4]
-            notify['face_name'] = face[3]
+        if(db_back):
+            if (len(db_back) > 0):
+                face = db_back[0]
+                notify['register_image'] = face[4]
+                notify['face_name'] = face[3]
 
-        #获取人脸库名字
-        face_lib_id = notify["face_lib_id"]
-        db_back = dbHelper.select_single_library(face_lib_id)
-        if (len(db_back) > 0):
-            lib = db_back[0]
-            notify['face_lib_name'] = lib[0]
+            #获取人脸库名字
+            face_lib_id = notify["face_lib_id"]
+            db_back = dbHelper.select_single_library(face_lib_id)
+            if (len(db_back) > 0):
+                lib = db_back[0]
+                notify['face_lib_name'] = lib[0]
 
-        # 获取摄像头名字
-        camera_url = notify['camera_url']
-        db_back = dbHelper.select_camera_by_url(camera_url)
-        if (len(db_back) > 0):
-            camera = db_back[0]
-            print(camera[0], "camera_name")
-            notify['camera_name'] = camera[0]
+            # 获取摄像头名字
+            camera_url = notify['camera_url']
+            db_back = dbHelper.select_camera_by_url(camera_url)
+            if (len(db_back) > 0):
+                camera = db_back[0]
+                notify['camera_name'] = camera[0]
 
         if command == 11:
             dbHelper.insert_notify(notify)

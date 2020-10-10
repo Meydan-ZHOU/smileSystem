@@ -5,6 +5,7 @@ from utils.common import displayOriginImage
 
 class Card(Ui_Form,QWidget):
     delete_card_data = pyqtSignal(dict)
+    detail_card_data = pyqtSignal(dict)
     def __init__(self,Datas,width):
         super(Card,self).__init__()
         self.setupUi(self)
@@ -22,6 +23,10 @@ class Card(Ui_Form,QWidget):
         self.data = datas['data']
         self.info = datas['info']
 
+    def mouseDoubleClickEvent(self,event):
+        if (event.button() == Qt.LeftButton):
+            self.detail_card_data.emit(self.data)
+
     def initSlot(self):
         self.toolButton_delete.clicked.connect(self.handleDelete)
 
@@ -37,11 +42,11 @@ class Card(Ui_Form,QWidget):
             self.label_image2.hide()
             displayOriginImage(self.label_image1, self.image1, width)
         else:
-            self.widget_info.setMaximumHeight(300)
-            self.label_image1.setMaximumHeight(150)
-            self.label_image2.setMaximumHeight(150)
-            displayOriginImage(self.label_image1, self.image1, width/2,120)
-            displayOriginImage(self.label_image2, self.image2, width/2,120)
+            self.widget_info.setMaximumHeight(350)
+            self.label_image1.setMaximumHeight(300)
+            self.label_image2.setMaximumHeight(300)
+            displayOriginImage(self.label_image1, self.image1, width/2,150)
+            displayOriginImage(self.label_image2, self.image2, width/2,150)
 
         for index,(name,value) in enumerate(self.info):
             label1 = QLabel(str(name))

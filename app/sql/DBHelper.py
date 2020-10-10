@@ -3,15 +3,22 @@ import base64
 import datetime
 from sql.Sqlite import ConnectSqlite
 
+from config.config import SERVER_IP
+
+totalPath = "..\\"+SERVER_IP
+if (not os.path.isdir(totalPath)):
+    os.makedirs(totalPath)
+
 dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
 
-notify_image_total_path = dirname+"\\allTasksImages\\"
-lib_face_all_image_path = dirname+'\\allFace\\'
+notify_image_total_path = totalPath+"\\allTasksImages\\"
+lib_face_all_image_path = totalPath+'\\allFace\\'
 
 class DBHelper(object):
     def __init__(self,*args, **kwargs):
         super(DBHelper,self).__init__()
-        self.db = ConnectSqlite("../faceManagement.db")
+        DBName = totalPath+"/faceManagement.db"
+        self.db = ConnectSqlite(DBName)
 
     #删除任务相关notify
     def delete_notify(self,task_id):
@@ -24,7 +31,6 @@ class DBHelper(object):
         path = notify_image_total_path+task_id
         self.delete_file(path)
 
-    #更新摄像头
     def update_camera(self,camera):
         ip = camera['ip']
         sn = camera['sn']
@@ -32,7 +38,14 @@ class DBHelper(object):
         username = camera['username']
         password = camera['password']
         url = camera['url']
-        sql = " UPDATE camera SET name='{name}',sn='{sn}',username='{username}',password='{password}',url='{url}' where ip='{ip}'".format(ip=ip,name=name,username=username,password=password,url=url,sn=sn)
+        sql = """
+            UPDATE camera SET name='{name}',
+            sn='{sn}',
+            username='{username}',
+            password='{password}',
+            url='{url}' 
+            where ip='{ip}'
+        """.format(ip=ip,name=name,username=username,password=password,url=url,sn=sn)
         return self.db.insert_update_table(sql)
 
     #删除摄像头
@@ -74,14 +87,22 @@ class DBHelper(object):
         return self.db.fetchall_table(sql)
 
     #查询所有人脸
-    def select_all_face(self,id):
-        sql = "SELECT * from face where face_lib_id='{id}'".format(id=id)
+    def select_all_face(self,params):
+        id = params['id']
+        start = params['start']
+        size = params['size']
+
+        sql = """
+            SELECT * from face where face_lib_id='{id}'
+            order by face_id desc  LIMIT {size} offset {start} 
+        """.format(id=id,start= start,size=size)
+
         return self.db.fetchall_table(sql)
 
     #删除单个人脸
     def delete_face(self,face_id,face_name,lib_name):
         sql = "DELETE FROM face WHERE face_id='{id}'".format(id=face_id)
-        path = lib_face_all_image_path+lib_name+'/'+face_name+'.jpg'
+        path = lib_face_all_image_path+lib_name+'/'+face_name+'_'+face_id+'.jpg'
         db_back = self.db.delete_table(sql)
         if(db_back):
             os.remove(path)
@@ -103,7 +124,7 @@ class DBHelper(object):
         tel = data["tel"]
 
         path = lib_face_all_image_path+lib_name
-        filename = face_name + '.jpg'
+        filename = face_name+'_'+face_id + '.jpg'
         face_path = path+'/'+filename
 
         if (not os.path.isdir(path)):
@@ -174,47 +195,83 @@ class DBHelper(object):
 
     #插入通知信息
     def insert_notify(self,data):
-        task_id = data["task_id"]
-        camera_url = data["camera_url"]
-        notify_time = data["notify_time"]
-        similarity = data["similarity"]
-        face_id = data["face_id"]
-        face_lib_id = data["face_lib_id"]
-        capture_image = data["capture_image"]
-        register_image = data["register_image"]
-        face_lib_name = data["face_lib_name"]
-        camera_name = data["camera_name"]
-        face_name = data["face_name"]
-        extras = str(data["extras"])
-        capture_face_image = data["capture_face_image"]
-        face_image = base64.b64decode(capture_face_image)
+        try:
+            task_id = data["task_id"]
+            camera_url = data["camera_url"]
+            notify_time = data["notify_time"]
+            similarity = data["similarity"]
+            face_id = data["face_id"]
+            face_lib_id = data["face_lib_id"]
+            capture_image = data["capture_image"]
+            register_image = data["register_image"]
+            face_lib_name = data["face_lib_name"]
+            camera_name = data["camera_name"]
+            face_name = data["face_name"]
+            extras = str(data["extras"])
+            capture_face_image = data["capture_face_image"]
+            face_image = base64.b64decode(capture_face_image)
+            face_capture_image = base64.b64decode(capture_image)
 
-        today = datetime.datetime.now().strftime('%Y-%m-%d')
-        task_dir_path = notify_image_total_path+task_id+'\\'+today+"\\"+face_id
-        face_file_name = 'face_'+notify_time+'.jpg'
+            today = datetime.datetime.now().strftime('%Y-%m-%d')
+            task_dir_path = notify_image_total_path+task_id+'\\'+today+"\\"+face_id
+            face_file_name = 'face_'+notify_time+'.jpg'
+            capture_file_name = 'capture_'+notify_time+'.jpg'
 
-        face_path = task_dir_path + '\\' + face_file_name
+            face_path = task_dir_path + '\\' + face_file_name
+            capture_path = task_dir_path + '\\' + capture_file_name
 
-        #存图片到本地
-        if(not os.path.isdir(task_dir_path)):
-            os.makedirs(task_dir_path)
+            #存图片到本地
+            if(not os.path.isdir(task_dir_path)):
+                os.makedirs(task_dir_path)
 
-        self.save_image_to_file(task_dir_path, face_file_name,face_image)
+            self.save_image_to_file(task_dir_path, face_file_name,face_image)
+            self.save_image_to_file(task_dir_path, capture_file_name,face_capture_image)
 
+            sql = """
+                INSERT INTO notify
+                (notify_time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_image,register_image,face_lib_name,camera_name,face_name,capture_image)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """
+            values = [(notify_time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_path,register_image,face_lib_name,camera_name,face_name,capture_path)]
+            print(self.db.insert_table_many(sql, values))
+        except Exception:
+            print("报警信息插入失败插入")
+
+    def query_notify_table_count(self,params):
+        name = params['name']
+        camera = params['camera']
+        library = params['library']
+        time = params['time']
         sql = """
-            INSERT INTO notify
-            (notify_time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_image,register_image,face_lib_name,camera_name,face_name)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-        """
-        values = [(notify_time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_path,register_image,face_lib_name,camera_name,face_name)]
-        print(values)
-        print(self.db.insert_table_many(sql, values))
+            SELECT count(*) from notify where face_name like '%{name}%'  
+            AND camera_name like '%{camera}%' 
+            AND notify_time >= {time} 
+            AND face_lib_name like '%{library}%' 
+        """.format(name=name,camera=camera,time=time,library=library)
+        return self.db.count_table(sql)
+
+    def query_face_table_count(self):
+        sql = "SELECT count(*) from face"
+        return self.db.count_table(sql)
+
 
     #查询某一任务所有通知
     def select_task_all_notify(self,task_id,params):
         name = params['name']
-        sql = "SELECT * from notify where task_id='{id}' AND face_name like '%{name}%'  order by notify_time desc  LIMIT 0,20 ".format(id=task_id,name=name)
-        print(sql)
+        camera = params['camera']
+        library = params['library']
+        time = params['time']
+        size = params['size']
+        start = params['start']
+        sql = """
+            SELECT * from notify where task_id='{id}' 
+            AND face_name like '%{name}%'  
+            AND camera_name like '%{camera}%' 
+            AND notify_time >= {time} 
+            AND face_lib_name like '%{library}%' 
+            order by notify_time desc  LIMIT {size} offset {start} 
+        """.format(id=task_id,name=name,camera=camera,time=time,library=library,start= start,size=size)
+
         return self.db.fetchall_table(sql)
 
     #创建人脸表
@@ -274,6 +331,7 @@ class DBHelper(object):
                      `register_image` TEXT,
                      `face_lib_name` TEXT,
                      `camera_name` TEXT,
-                     `face_name` TEXT)
+                     `face_name` TEXT,
+                     `capture_image` TEXT)
                  """
         self.db.create_tabel(sql)

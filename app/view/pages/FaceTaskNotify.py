@@ -1,10 +1,10 @@
 import time, threading,json
 from PyQt5.QtWidgets import QWidget,QApplication,qApp
 from ui.TaskNotifyUI import Ui_Form
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import pyqtSignal,QDate
 
 from view.components.ScrollWrapper import ScrollWrapper
+from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
 
@@ -18,39 +18,126 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.dataFlag = True
         self.current_task_id = task_id
         self.dbHelper = DBHelper()
-        self.initUI()
+        self.initData()
         self.initSlot()
-        self.name = ''
+        self.initUI()
+        self.getLibraryList()
+        self.getCameraList()
+
+    def resizeEvent(self, event):
+        width = self.size().width()
+        if(width>1200):
+            self.pageSize = 16
+        else:
+            self.pageSize = 10
+
         self.queryData()
 
-    def resizeEvent(self,event):
-        print("isresize")
-        #self.queryData()
+    def initData(self):
+        self.name = ''
+        self.currentTime = 0
+        self.totalCount = 0
+        self.pageSize = 10
+        self.currentPage = 1
+        self.cameraList = []
+        self.currentCamera = '全部'
+        self.camera_name = ''
+        self.libraryList = []
+        self.library_name = ''
+        self.currentLibrary = '全部'
+
+    def initUI(self):
+        self.dateTimeEdit.setDate(QDate.currentDate())
+        self.dateTimeEdit.setMinimumDate(QDate.currentDate().addDays(-365))
+        self.dateTimeEdit.setMaximumDate(QDate.currentDate().addDays(365))
+        self.dateTimeEdit.setCalendarPopup(True)
 
     def initSlot(self):
+        self.dateTimeEdit.dateTimeChanged.connect(self.onDateTimeChanged)
         self.update_notify_list_ui.connect(self.updateNotifyListUI)
         self.pushButton_update.clicked.connect(self.getAllNewest)
         self.pushButton_search.clicked.connect(self.queryData)
 
-    def initUI(self):
-        pass
-        #self.setStyleSheet(SYS_STYLE_COMMON)
+    def onDateTimeChanged(self,dataTime):
+        self.currentTime = dataTime.toSecsSinceEpoch()
 
-    def isLoading(self, flag):
-        pass
-        # if (flag == True):
-        #     self.widget_notify.close()
-        #     path = "static/images/loading.gif"
-        #     jpg = QPixmap(path)
-        #     self.label_loading.setPixmap(jpg)
-        #     self.label_loading.setScaledContents(True)
-        #     self.label_loading.show()
-        # else:
-        #     self.widget_notify.show()
-        #     self.label_loading.close()
+    def getCameraList(self):
+        db_back = self.dbHelper.select_all_camera()
+        if (db_back):
+            self.cameraList = db_back
+        else:
+            self.cameraList = []
+        self.updateCameraComboboxUI()
+
+    def updateCameraComboboxUI(self):
+        comboBox = self.comboBox_camera
+        cameras = self.cameraList
+        comboBox.addItem('全部')
+        comboBox.setItemData(0, '全部')
+        for index, camera in enumerate(cameras):
+            name, ip,sn,username,password,url = camera
+            comboBox.addItem(name)
+            comboBox.setItemData(index+1, name)
+        comboBox.setCurrentIndex(0)
+        self.cameraChange(0)
+        comboBox.currentIndexChanged.connect(self.cameraChange)
+
+    def cameraChange(self, i):
+        self.currentCamera = self.comboBox_camera.itemData(i)
+
+    def getLibraryList(self):
+        db_back = self.dbHelper.select_all_library()
+        if (db_back):
+            self.libraryList = db_back
+        else:
+            self.libraryList = []
+        self.updateLibraryComboboxUI()
+
+    def updateLibraryComboboxUI(self):
+        comboBox = self.comboBox_library
+        library = self.libraryList
+        comboBox.addItem('全部')
+        comboBox.setItemData(0,'全部')
+        for index, lib in enumerate(library):
+            lib_name, lib_id = lib
+            comboBox.addItem(lib_name)
+            comboBox.setItemData(index+1, lib_name)
+        comboBox.setCurrentIndex(0)
+        self.libraryChange(0)
+        comboBox.currentIndexChanged.connect(self.libraryChange)
+
+    def libraryChange(self, i):
+        self.currentLibrary = self.comboBox_library.itemData(i)
+        print(" self.currentLibrary", self.currentLibrary)
+
+    def getNotifyTotalCount(self,params):
+        self.totalCount = self.dbHelper.query_notify_table_count(params)
+
+    def updatePaginationUI(self):
+        count = self.horizontalLayout_pagination.count()
+        for i in range(count):
+            self.horizontalLayout_pagination.takeAt(i).widget().deleteLater()
+
+        pagination = Pagination(self.totalCount,self.pageSize,self.currentPage)
+        pagination.current_page_change.connect(self.handleCurrentPageChange)
+        self.horizontalLayout_pagination.addWidget(pagination)
+
+    def handleCurrentPageChange(self,page):
+        self.currentPage = page
+        self.getNotifyList()
 
     def queryData(self):
+        print(self.dateTimeEdit.time())
         self.name = self.lineEdit_name.text()
+        if (self.currentCamera == '全部'):
+            self.camera_name = ''
+        else:
+            self.camera_name = self.currentCamera
+
+        if (self.currentLibrary == '全部'):
+            self.library_name = ''
+        else:
+            self.library_name = self.currentLibrary
         self.getNotifyList()
 
     def timestamp_to_str(self,timestamp=None, format='%Y-%m-%d %H:%M:%S'):
@@ -66,18 +153,24 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.queryData()
 
     def getNotifyList(self):
-        self.isLoading(True)
         self.notifyList = []
         params = {
-            'name':self.name
+            'name':self.name,
+            'camera':self.camera_name,
+            'library':self.library_name,
+            'size':self.pageSize,
+            'time':self.currentTime,
+            'start':(self.currentPage-1)*self.pageSize
         }
+        self.getNotifyTotalCount(params)
+        print(params)
         db_back = self.dbHelper.select_task_all_notify(self.current_task_id,params)
-        print("notify db_back", db_back)
         if(db_back):
             self.notifyList = db_back
         else:
             self.notifyList = []
 
+        self.updatePaginationUI()
         self.update_notify_list_ui.emit(self.notifyList)
 
     def clearHorizontalLayout(self):
@@ -89,9 +182,10 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         dataList = []
         self.clearHorizontalLayout()
         for index,notify in enumerate(list):
-            time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_image,register_image,face_lib_name,camera_name,face_name = notify
+            time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_image,register_image,face_lib_name,camera_name,face_name,capture_image = notify
             time_str = self.timestamp_to_str(int(time))
             information = json.loads(extras.replace("'","\""))
+            similarity_str = str(round(float(similarity)*100,0))+'%'
             age = information['age']
             name = information['face_name']
             sex = information['sex']
@@ -104,9 +198,10 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
                 "data": {
                     "face_id": face_id,
                     "lib_id": face_lib_id,
+                    'notify':(time_str,similarity_str,face_image,register_image,camera_name,face_lib_name,capture_image,face_name,camera_url)
                 },
                 "info": [
-                    ('相似度：', str(round(float(similarity)*100,0))+'%'),
+                    ('相似度：', similarity_str),
                     ('姓名：', name),
                     ('人脸库：', face_lib_name),
                     ('摄像头：', camera_name),
@@ -114,7 +209,10 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
                 ]
             }
             dataList.append(options)
-        scrollArea = ScrollWrapper(dataList)
-        print("widget_notify", self.size())
+        scrollArea = ScrollWrapper(dataList,5)
+        scrollArea.detail_data.connect(self.handleNotifyDetail)
         self.horizontalLayout.addWidget(scrollArea)
-        self.isLoading(False)
+
+
+    def handleNotifyDetail(self,data):
+        self.HomeLayout.goFaceNotifyDetailPage(data)

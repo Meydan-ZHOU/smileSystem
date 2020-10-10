@@ -6,7 +6,7 @@ import sqlite3
 
 class ConnectSqlite:
 
-    def __init__(self, dbName="test.db"):
+    def __init__(self, dbName):
         """
         初始化连接--使用完记得关闭连接
         :param dbName: 连接库名字，注意，以'.db'结尾
@@ -50,6 +50,19 @@ class ConnectSqlite:
         except Exception as e:
             print(self._time_now, "[DROP TABLE ERROR]", e)
             return False
+
+    def count_table(self,sql):
+        """
+             查询数据总数
+             :param sql:
+             :return:
+        """
+        try:
+            self._cur.execute(sql)
+            count, = self._cur.fetchone()
+            return count
+        except Exception as e:
+            print(self._time_now, "[SELECT TABLE ERROR]", e)
 
     def delete_table(self, sql):
         """

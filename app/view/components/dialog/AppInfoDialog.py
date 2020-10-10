@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QDialog,qApp
 from ui.AppInfoDialog import Ui_Dialog
 from api.index import getAppInfo
 
@@ -31,19 +31,24 @@ class AppInfoDialog(Ui_Dialog, QDialog):
         else:
             self.accept()
             config_write(host)
+            msg_box(self, '操作成功,请重新启动客户端')
+            qApp.closeAllWindows()
 
     def getServerHost(self):
         self.host = config_read()
         self.lineEdit_server_ip.setText(self.host)
 
     def getAppInformation(self):
-        res = getAppInfo()
-        if(res):
-            result = res.json()
-            if(res.status_code==200 and result.get('code')==0):
-                data = result.get("data")
-                self.lineEdit.setText(data['axstream_version'])
-                self.lineEdit_2.setText(data['face_identification_version'])
-                self.lineEdit_3.setText(data['person_manager_version'])
-            else:
-                msg_box(self,result.get('msg'))
+        try:
+            res = getAppInfo()
+            if(res):
+                result = res.json()
+                if(res.status_code==200 and result.get('code')==0):
+                    data = result.get("data")
+                    self.lineEdit.setText(data['axstream_version'])
+                    self.lineEdit_2.setText(data['face_identification_version'])
+                    self.lineEdit_3.setText(data['person_manager_version'])
+                else:
+                    msg_box(self,result.get('msg'))
+        except Exception:
+            msg_box(self,"服务器连接超时，请重新设置")

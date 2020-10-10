@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from ui.NewFaceUI import Ui_Dialog
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import  pyqtSignal
+from PyQt5.QtCore import pyqtSignal
 from utils.common import msg_box,displayOriginImage
 from api.index import detectImage
 import base64
@@ -28,9 +28,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
 
     def initUI(self):
         self.setWindowTitle("添加人脸")
-        self.label_image.setMaximumWidth(300)
-        self.label_image.setMaximumHeight(300)
-        displayOriginImage(self.label_image, "static/images/faceIcon.png")
+        displayOriginImage(self.label_image, "static/images/faceIcon.png",None,300,False)
         self.label_image.setScaledContents(True)
 
     def updateLibraryComboboxUI(self):
@@ -61,7 +59,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
                 return
             fp = open(imgName, "rb")
             data = fp.read()
-            displayOriginImage(self.label_image,jpg)
+            displayOriginImage(self.label_image,jpg,None,300,False)
             self.origin_image = data
             self.base64_image = str(base64.b64encode(data),"utf-8")
             self.handleDetectImage(self.base64_image)

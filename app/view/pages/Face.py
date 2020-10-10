@@ -4,6 +4,7 @@ from view.pages.FaceLibrary import FaceLibraryPage
 from view.pages.FaceTask import FaceTaskPage
 from view.pages.FaceMain import FaceMainPage
 from view.pages.FaceTaskNotify import FaceTaskNotifyPage
+from view.pages.FaceNotifyDetail import FaceNotifyDetailPage
 
 from utils.common import SYS_STYLE_COMMON
 
@@ -39,6 +40,11 @@ class FacePage(Ui_Form,QWidget):
         self.label.setText("新建任务")
         task = FaceTaskPage(self)
         self.layoutPage(task)
+
+    def goFaceNotifyDetailPage(self,data):
+        self.label.setText("报警详情")
+        notifyDetail = FaceNotifyDetailPage(self,data)
+        self.layoutPage(notifyDetail)
 
     def layoutPage(self,page):
         self.clearGridLayout()
