@@ -2,6 +2,8 @@ import math
 from PyQt5.QtWidgets import QWidget,QHBoxLayout,QPushButton,QLabel,QMessageBox,QLineEdit
 from PyQt5.QtCore import pyqtSignal
 
+from utils.common import btn_set_pointer_cursor
+
 class Pagination(QWidget):
     current_page_change = pyqtSignal(int)
     def __init__(self,total,size,current_page):
@@ -19,14 +21,20 @@ class Pagination(QWidget):
         homePageBtn = QPushButton("首页")
         prePageBtn = QPushButton("上一页")
         self.curPageLabel = QLabel(str(current_page))
+        self.totalPageLabel = QLabel('/ ' + str(self.totalPage))
         nextPageBtn = QPushButton("下一页")
         finalPageBtn = QPushButton("尾页")
-        self.totalPageLabel = QLabel('共' + str(self.totalPage) + '页')
         skipLable_0 = QLabel("跳到")
         self.skipPage = QLineEdit()
         self.skipPage.setMaximumWidth(40)
         skipLabel_1 = QLabel("页")
         confirmSkip = QPushButton("确定")
+
+        btn_set_pointer_cursor(homePageBtn)
+        btn_set_pointer_cursor(prePageBtn)
+        btn_set_pointer_cursor(nextPageBtn)
+        btn_set_pointer_cursor(finalPageBtn)
+        btn_set_pointer_cursor(confirmSkip)
 
         homePageBtn.clicked.connect(self._home_page)
         prePageBtn.clicked.connect(self._pre_page)
@@ -39,9 +47,9 @@ class Pagination(QWidget):
         h.addWidget(homePageBtn)
         h.addWidget(prePageBtn)
         h.addWidget(self.curPageLabel)
+        h.addWidget(self.totalPageLabel)
         h.addWidget(nextPageBtn)
         h.addWidget(finalPageBtn)
-        h.addWidget(self.totalPageLabel)
         h.addWidget(skipLable_0)
         h.addWidget(self.skipPage)
         h.addWidget(skipLabel_1)

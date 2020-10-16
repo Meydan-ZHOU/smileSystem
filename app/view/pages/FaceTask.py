@@ -7,7 +7,7 @@ from PyQt5.QtCore import QSize,Qt
 from view.components.Video import Video
 
 from api.index import newTask
-from utils.common import msg_box
+from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
@@ -20,11 +20,14 @@ class FaceTaskPage(Ui_Form,QWidget):
         self.dbHelper = DBHelper()
         self.hostIp = self.getHostIP()
         self.initUI()
+
+    def getDatas(self):
         self.initData()
         self.getLibraryList()
         self.getAllCameraList()
 
     def initUI(self):
+        self.setObjectName("faceTask")
         self.init_camera()
 
     def getHostIP(self):
@@ -71,6 +74,7 @@ class FaceTaskPage(Ui_Form,QWidget):
             # 总的横向布局
             h = QHBoxLayout()
             cb = QCheckBox()
+            btn_set_pointer_cursor(cb)
             status = self.libraryHasCamera(url)
             cb.setChecked(status)
             cb.setProperty("url",url)
@@ -82,6 +86,7 @@ class FaceTaskPage(Ui_Form,QWidget):
             btn.setText("播放")
             btn.setProperty("data",(url,name))
             btn.clicked.connect(self.handleCameraClicked)
+            btn_set_pointer_cursor(btn)
             # 摄像头编辑按钮
             h.addWidget(cb)
             h.addWidget(label)
@@ -92,6 +97,8 @@ class FaceTaskPage(Ui_Form,QWidget):
             self.listWidget_camera.setItemWidget(item, widget)
 
     def cameraCheckedChanged(self):
+        if self.currentLibrary==None:
+            return
         lib_name, lib_id = self.currentLibrary
         url = self.sender().property('url')
         if(self.sender().checkState()==0):
@@ -99,7 +106,10 @@ class FaceTaskPage(Ui_Form,QWidget):
         else:
             self.libraryCamera[lib_id]['cameras'].add(url)
 
+        print(self.libraryCamera)
+
     def getLibraryList(self):
+        self.currentLibrary = None
         db_back = self.dbHelper.select_all_library()
         if (db_back):
             self.libraryList = db_back
@@ -116,7 +126,9 @@ class FaceTaskPage(Ui_Form,QWidget):
 
 
     def updateLibraryComboboxUI(self,library):
+        self.comboBox_face_libray.clearEditText()
         comboBox = self.comboBox_face_libray
+        print("updateLibraryComboboxUI lib", library)
         for index,lib in enumerate(library):
             lib_name,lib_id = lib
             comboBox.addItem(lib_name)
@@ -130,7 +142,11 @@ class FaceTaskPage(Ui_Form,QWidget):
         comboBox.currentIndexChanged.connect(self.faceLibraryChanged)
 
     def faceLibraryChanged(self,i):
+        if(i<0):
+            return
+        print("I", i)
         self.currentLibrary = self.comboBox_face_libray.itemData(i)
+        print("I", 'self.currentLibrary',self.currentLibrary)
         self.updateCameraListUI()
         self.initOtherSettting()
 
@@ -144,17 +160,19 @@ class FaceTaskPage(Ui_Form,QWidget):
 
     def handleCameraClicked(self):
         url,name = self.sender().property('data')
-        print(url, name)
-        print(self.widget_task_video.size())
         self.video.Open(url,name)
 
     def smilarityChanged(self):
+        if(self.currentLibrary==None):
+            return
         lib_name, lib_id = self.currentLibrary
         library = self.libraryCamera[lib_id]
         similarity = float(self.doubleSpinBox_similarity.text())
         library['similarity'] = similarity
 
     def initOtherSettting(self):
+        if (self.currentLibrary == None):
+            return
         lib_name, lib_id = self.currentLibrary
         library = self.libraryCamera[lib_id]
         similarity = library['similarity']
@@ -219,4 +237,3 @@ class FaceTaskPage(Ui_Form,QWidget):
 
     def handleCancel(self):
         self.getLibraryList()
-        print(self.libraryCamera)

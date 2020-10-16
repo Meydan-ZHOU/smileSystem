@@ -202,12 +202,15 @@ font-weight:500;</string>
           <widget class="QWidget" name="widget_nav" native="true">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QPushButton" name="pushButton_live">
+             <widget class="QPushButton" name="pushButton_0">
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
                <string>视频预览</string>
@@ -218,12 +221,15 @@ font-weight:500;</string>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_face">
+             <widget class="QPushButton" name="pushButton_1">
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
               </property>
               <property name="text">
                <string>人脸识别</string>

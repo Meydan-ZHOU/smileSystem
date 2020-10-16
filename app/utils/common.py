@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QMessageBox,QGridLayout
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap,QCursor
+from PyQt5.QtCore import Qt
 import os,sys
+
 dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
 
 class CommonHelper:
@@ -9,13 +11,17 @@ class CommonHelper:
         with open(style,'r') as f:
             return f.read()
 
+def btn_set_pointer_cursor(btn):
+    btn.setCursor(QCursor(Qt.PointingHandCursor))
+
+
 def msg_box(widget,str):
     QMessageBox.warning(widget, "提示",str, QMessageBox.Yes | QMessageBox.No)
 
-def displayOriginImage(label,imagePath,width=None,height=None,isMaxedHeight = True,maxHeight=150):
+def displayOriginImage(label,imagePath,width=None,height=None):
     jpg1 = QPixmap(imagePath)
-    h=0
-    w=0
+    w = 0
+    h = 0
     if(not width==None):
         w = width
         rate = jpg1.width() / w
@@ -30,12 +36,12 @@ def displayOriginImage(label,imagePath,width=None,height=None,isMaxedHeight = Tr
             w = jpg1.width() / rate
 
 
-    if(h>maxHeight and isMaxedHeight == True):
-        h=maxHeight
-
     if (not width == None and not height == None):
         w= width
         h= height
+
+    if(h/w>1.33):
+        h=w*1.33
 
     label.setFixedWidth(w)
     label.setFixedHeight(h)

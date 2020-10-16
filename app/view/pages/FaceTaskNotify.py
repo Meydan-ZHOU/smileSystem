@@ -10,19 +10,24 @@ from sql.DBHelper import DBHelper
 
 class FaceTaskNotifyPage(Ui_Form,QWidget):
     update_notify_list_ui = pyqtSignal(list)
-    def __init__(self, HomeLayout,task_id, parent=None):
+    def __init__(self, HomeLayout, parent=None):
         super(FaceTaskNotifyPage, self).__init__(parent)
         self.setupUi(self)
         self.HomeLayout = HomeLayout
         print("任务通知页面----------------------------------")
         self.dataFlag = True
-        self.current_task_id = task_id
+        self.current_task_id = ''
+        self.isLoading = False
         self.dbHelper = DBHelper()
-        self.initData()
         self.initSlot()
+        self.initData()
         self.initUI()
+
+    def getDatas(self):
+        self.initData()
         self.getLibraryList()
         self.getCameraList()
+        self.getAllNewest()
 
     def resizeEvent(self, event):
         width = self.size().width()
@@ -47,6 +52,7 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.currentLibrary = '全部'
 
     def initUI(self):
+        self.setObjectName('faceNotify')
         self.dateTimeEdit.setDate(QDate.currentDate())
         self.dateTimeEdit.setMinimumDate(QDate.currentDate().addDays(-365))
         self.dateTimeEdit.setMaximumDate(QDate.currentDate().addDays(365))
@@ -70,6 +76,7 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.updateCameraComboboxUI()
 
     def updateCameraComboboxUI(self):
+        self.comboBox_camera.clearEditText()
         comboBox = self.comboBox_camera
         cameras = self.cameraList
         comboBox.addItem('全部')
@@ -94,6 +101,7 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.updateLibraryComboboxUI()
 
     def updateLibraryComboboxUI(self):
+        self.comboBox_library.clearEditText()
         comboBox = self.comboBox_library
         library = self.libraryList
         comboBox.addItem('全部')
@@ -108,7 +116,6 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
 
     def libraryChange(self, i):
         self.currentLibrary = self.comboBox_library.itemData(i)
-        print(" self.currentLibrary", self.currentLibrary)
 
     def getNotifyTotalCount(self,params):
         self.totalCount = self.dbHelper.query_notify_table_count(params)
@@ -127,7 +134,6 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.getNotifyList()
 
     def queryData(self):
-        print(self.dateTimeEdit.time())
         self.name = self.lineEdit_name.text()
         if (self.currentCamera == '全部'):
             self.camera_name = ''
@@ -153,7 +159,10 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.queryData()
 
     def getNotifyList(self):
+        if(self.current_task_id == '' or True==self.isLoading):
+            return
         self.notifyList = []
+        self.isLoading = True
         params = {
             'name':self.name,
             'camera':self.camera_name,
@@ -211,6 +220,7 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
             dataList.append(options)
         scrollArea = ScrollWrapper(dataList,5)
         scrollArea.detail_data.connect(self.handleNotifyDetail)
+        self.isLoading = False
         self.horizontalLayout.addWidget(scrollArea)
 
 

@@ -4,7 +4,7 @@ from ui.FaceMainUI import Ui_Form
 from PyQt5.QtCore import pyqtSignal
 
 from api.index import get_tasks_list,get_task_info_list,stopTask
-from utils.common import msg_box
+from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
@@ -17,46 +17,75 @@ class FaceMainPage(Ui_Form,QWidget):
         print("人脸主页面----------------------------------")
         self.dbHelper = DBHelper()
         self.dataFlag = True
+        self.isGettingData = False
         self.initSlot()
+        self.initUI()
+
+    def getDatas(self):
+        print("face main get datas")
+        self.dataFlag = True
         self.initTable()
         self.updateData()
 
     def initUI(self):
-        pass
-        #self.setStyleSheet(SYS_STYLE_COMMON)
+        self.setObjectName("faceMain")
 
     def updateData(self):
-        th = threading.Thread(target=self.getTaskDatas)
+        th = threading.Thread(target=self.getTaskDatas,name="getTasks")
         th.setDaemon(True)
         th.start()
+
+    def getDataError(self):
+        self.isGettingData = False
+        self.dataFlag = False
 
     def initSlot(self):
         self.update_table_list_ui.connect(self.updateTableListUI)
 
+    def goFaceMain(self):
+        self.HomeLayout.goFaceMain()
+
+    def goLibraryManagementPage(self):
+        self.HomeLayout.goLibraryManagementPage()
+
+    def goFaceTaskPage(self):
+        self.HomeLayout.goFaceTaskPage()
+
     def getTaskDatas(self):
         while self.dataFlag:
             try:
+                pageIndex = self.HomeLayout.stackedWidget.currentIndex()
+                homePageIndex = self.HomeLayout.HomeLayout.stackedWidget.currentIndex()
+
+                if(not pageIndex == 0 or not homePageIndex == 1):
+                    self.getDataError()
+                    print("不在任务请求页面哦")
+                    return
                 self.taskIdList = []
                 self.taskInfoList = []
                 self.getTasksList()
-                qApp.processEvents()
+                self.isGettingData = True
                 time.sleep(5)
-            except Exception:
-                self.dataFlag = False
-                print("请求任务状态异常停止", threading.get_ident())
+            except Exception as e:
+                self.getDataError()
+                print("请求任务列表异常停止", e)
 
     def getTaskInfoList(self):
         taskId = self.taskIdList
         self.taskInfoList.clear()
         for index,id in enumerate(taskId):
-            res = get_task_info_list(id)
-            if res:
-                result = res.json()
-                if(res.status_code==200 and result.get("code")==0):
-                    data = result.get('data')
-                    data["task_id"] = id
-                    self.taskInfoList.append(data)
-        print(self.taskInfoList)
+            try:
+                res = get_task_info_list(id)
+                if res:
+                    result = res.json()
+                    if(res.status_code==200 and result.get("code")==0):
+                        data = result.get('data')
+                        data["task_id"] = id
+                        self.taskInfoList.append(data)
+            except ConnectionError as e:
+                print(e)
+                msg_box(self,"服务器连接异常")
+
         self.formatData(self.taskInfoList)
 
     def formatData(self,tasks):
@@ -133,7 +162,6 @@ class FaceMainPage(Ui_Form,QWidget):
         tableWidget = self.tableWidget
         tableWidget.clearContents()
         tableWidget.setRowCount(len(tasks_dict))
-        print("tasks_dict", tasks_dict)
         for i,task_id in enumerate(tasks_dict):
             task = tasks_dict[task_id]
             server = task['server']
@@ -178,11 +206,13 @@ class FaceMainPage(Ui_Form,QWidget):
             btn_del.setProperty('class','danger')
             btn_del.setProperty("task_id",task_id)
             btn_del.clicked.connect(self.handleDeleteTask)
+            btn_set_pointer_cursor(btn_del)
             btn_show = QPushButton()
             btn_show.setText("查看")
             btn_show.setProperty('class', 'default')
             btn_show.setProperty("task_id", task_id)
             btn_show.clicked.connect(self.goTaskDetectPage)
+            btn_set_pointer_cursor(btn_show)
             h.addWidget(btn_del)
             h.addWidget(btn_show)
             widget.setLayout(h)
@@ -210,6 +240,8 @@ class FaceMainPage(Ui_Form,QWidget):
             label = QLabel()
             item = lists[index]
             label.setText(str(item))
+            if(item == '异常'):
+                label.setProperty('class','error')
             v.addWidget(label)
         widget.setLayout(v)
         return widget
@@ -229,24 +261,32 @@ class FaceMainPage(Ui_Form,QWidget):
         params = {
             "task_id":task_id
         }
-        res = stopTask(params)
-        if res:
-            data = res.json()
-            if(res.status_code==200 and data.get("code")==0):
-                db_back = self.dbHelper.delete_notify(task_id)
-                if(db_back):
-                    msg_box(self, "操作成功")
-                    self.getTasksList()
+        try:
+            res = stopTask(params)
+            if res:
+                data = res.json()
+                if(res.status_code==200 and data.get("code")==0):
+                    db_back = self.dbHelper.delete_notify(task_id)
+                    if(db_back):
+                        msg_box(self, "操作成功")
+                        self.getTasksList()
+                    else:
+                        msg_box(self,"操作失败")
                 else:
-                    msg_box(self,"操作失败")
-            else:
-                msg_box(self,data.get("msg"))
+                    msg_box(self,data.get("msg"))
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def getTasksList(self):
-        res = get_tasks_list()
-        if res:
-            data = res.json()
-            self.taskIdList.clear()
-            if(res.status_code==200 and data.get('code')==0):
-                self.taskIdList = data.get('data')
-                self.getTaskInfoList()
+        try:
+            res = get_tasks_list()
+            if res:
+                data = res.json()
+                self.taskIdList.clear()
+                if(res.status_code==200 and data.get('code')==0):
+                    self.taskIdList = data.get('data')
+                    self.getTaskInfoList()
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")

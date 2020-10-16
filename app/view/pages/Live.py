@@ -4,7 +4,7 @@ from ui.LiveUI import Ui_Form
 from view.pages.dialog.AddCameraDialog import AddCameraDialog
 from view.components.Video import Video
 
-from utils.common import msg_box
+from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
@@ -14,19 +14,21 @@ class LivePage(Ui_Form,QWidget):
         super(LivePage, self).__init__(parent)
         self.setupUi(self)
         self.initUI()
-        self.cameraList = []
         self.dbHelper = DBHelper()
         self.createTable()
-        self.getAllCameraList()
         print("我是 live")
 
+    def getDatas(self):
+        self.cameraList = []
+        self.videoList = []
+        self.getAllCameraList()
 
     def createTable(self):
         self.dbHelper.create_camera_table()
 
     def initUI(self):
         self.setObjectName("liveW")
-        self.init_camera()
+        self.initVideo()
 
     def updateCameraListUI(self):
         self.listWidget.clear()
@@ -48,7 +50,9 @@ class LivePage(Ui_Form,QWidget):
             btn.setText("编辑")
             btn.setFixedSize(50, 25)
             btn.setProperty("data",camera)
+            btn.setProperty('class','default')
             btn.clicked.connect(self.handleEditCamera)
+            btn_set_pointer_cursor(btn)
 
             h.addWidget(label_name)
             h.addWidget(btn)
@@ -98,14 +102,17 @@ class LivePage(Ui_Form,QWidget):
             msg_box(self, "操作失败")
         self.getAllCameraList()
 
-    def init_camera(self):
+    def initVideo(self):
+        count = self.horizontalLayout_video.count()
+        for i in range(count):
+            self.horizontalLayout_video.takeAt(i).widget().deleteLater()
         """初始化摄像头监控"""
-        print(self.widget_video_show.width())
+
         self.video = Video()
         self.horizontalLayout_video.addWidget(self.video)
 
     def handleCameraChanged(self,item):
+        print("camera changed")
         url = item.data(0)[5]
         name = item.data(0)[0]
-        print(self.video)
         self.video.Open(url,name)

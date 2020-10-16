@@ -1,5 +1,5 @@
 import sys,threading
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication,QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 #系统入口登录页面

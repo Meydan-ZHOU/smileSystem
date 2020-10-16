@@ -11,18 +11,17 @@ class Header(Ui_Form,QWidget):
         self.setupUi(self)
         self.HomeWindow = HomeWindow
         self._drag = False
-        self.currentActive = 'live'
-        self.setNavStatus()
+        self.setNavStatus(0)
         self.initUI()
         self.initSlot()
         self.setMouseTracking(True)
 
-    def setNavStatus(self):
+    def setNavStatus(self,index):
         children = self.widget_nav.children()
         for child in children:
             if(child.inherits('QPushButton')):
                 child.setProperty('class','default')
-                if(child.objectName()=='pushButton_'+self.currentActive):
+                if(child.objectName()=='pushButton_'+str(index)):
                     child.setProperty('class','active')
         self.myQSS()
 

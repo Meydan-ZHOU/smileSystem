@@ -61,6 +61,8 @@ class Ui_Form_home(object):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.label = QtWidgets.QLabel(self.widget_bottom)
         self.label.setAcceptDrops(True)
+        self.label.setStyleSheet("font-size:12px;\n"
+"color:#7a7b7e;")
         self.label.setLineWidth(0)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")

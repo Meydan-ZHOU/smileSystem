@@ -50,6 +50,7 @@ class Ui_Form(object):
         self.toolButton_delete = QtWidgets.QToolButton(self.widget_operates)
         self.toolButton_delete.setMinimumSize(QtCore.QSize(0, 0))
         self.toolButton_delete.setMaximumSize(QtCore.QSize(20, 20))
+        self.toolButton_delete.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.toolButton_delete.setObjectName("toolButton_delete")
         self.horizontalLayout_2.addWidget(self.toolButton_delete)
         self.verticalLayout_2.addWidget(self.widget_operates)

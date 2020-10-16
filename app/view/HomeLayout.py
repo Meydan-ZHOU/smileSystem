@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget,QStackedWidget
 from PyQt5.QtCore import Qt
 from ui.HomeLayoutUI import Ui_Form_home
 from utils.common import SYS_STYLE_COMMON
@@ -15,37 +15,50 @@ class HomeWindow(Ui_Form_home,QWidget):
         # 鼠标跟踪
         self.setMouseTracking(True)
         self.initUI()
-        self.goLivePage()
+        self.initHeader()
+        self.initStackedWidget()
+        self.initSlot()
 
     def initUI(self):
         self.setWindowTitle("人脸识别系统")
         self.setStyleSheet(SYS_STYLE_COMMON)
-        self.initHeader()
 
     def initHeader(self):
         self.header = Header(self)
-        self.header.pushButton_live.clicked.connect(self.goLivePage)
-        self.header.pushButton_face.clicked.connect(self.goFacePage)
         self.horizontalLayout_top.addWidget(self.header)
 
+    def initSlot(self):
+        self.header.pushButton_0.clicked.connect(self.goLivePage)
+        self.header.pushButton_1.clicked.connect(self.goFacePage)
+        self.stackedWidget.currentChanged.connect(self.currentStackedIndexChanged)
+
+    def initStackedWidget(self):
+        self.stackedWidget = QStackedWidget()
+        self.live = LivePage(self)
+        self.face = FacePage(self)
+        self.stackedWidget.addWidget(self.live)
+        self.stackedWidget.addWidget(self.face)
+        self.live.getDatas()
+        self.goLivePage()
+        self.gridLayout_main.addWidget(self.stackedWidget)
+
+    def setStackedPageIndex(self,index):
+        self.stackedWidget.setCurrentIndex(index)
+        self.header.setNavStatus(index)
 
     def goLivePage(self):
-        live = LivePage(self)
-        self.header.currentActive = 'live'
-        self.header.setNavStatus()
-        self.layoutPage(live)
+        self.setStackedPageIndex(0)
 
     def goFacePage(self):
-        face = FacePage(self)
-        self.header.currentActive = 'face'
-        self.header.setNavStatus()
-        self.layoutPage(face)
+        self.setStackedPageIndex(1)
 
-    def layoutPage(self, page):
-        self.clearGridLayout()
-        self.gridLayout_main.addWidget(page, 0, 0, 1, 1)
+    def currentStackedIndexChanged(self,index):
+        currentWidget = self.stackedWidget.currentWidget()
+        objectName = currentWidget.objectName()
 
-    def clearGridLayout(self):
-        count = self.gridLayout_main.count()
-        for i in range(count):
-            self.gridLayout_main.takeAt(i).widget().deleteLater()
+        if objectName == 'liveW':
+            currentWidget.getDatas()
+        elif objectName == 'faceW':
+            self.live.video.Close()
+            currentWidget.goFaceMain()
+

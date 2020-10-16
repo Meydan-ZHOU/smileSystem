@@ -118,6 +118,10 @@
           <property name="acceptDrops">
            <bool>true</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">font-size:12px;
+color:#7a7b7e;</string>
+          </property>
           <property name="lineWidth">
            <number>0</number>
           </property>

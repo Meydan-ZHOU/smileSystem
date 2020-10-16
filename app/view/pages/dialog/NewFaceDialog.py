@@ -28,10 +28,11 @@ class NewFaceDialog(Ui_Dialog, QDialog):
 
     def initUI(self):
         self.setWindowTitle("添加人脸")
-        displayOriginImage(self.label_image, "static/images/faceIcon.png",None,300,False)
+        displayOriginImage(self.label_image, "static/images/faceIcon.png",None,300)
         self.label_image.setScaledContents(True)
 
     def updateLibraryComboboxUI(self):
+        self.comboBox_library.clearEditText()
         comboBox = self.comboBox_library
         library = self.libraryList
         for index, lib in enumerate(library):
@@ -59,7 +60,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
                 return
             fp = open(imgName, "rb")
             data = fp.read()
-            displayOriginImage(self.label_image,jpg,None,300,False)
+            displayOriginImage(self.label_image,jpg,None,300)
             self.origin_image = data
             self.base64_image = str(base64.b64encode(data),"utf-8")
             self.handleDetectImage(self.base64_image)
@@ -104,15 +105,19 @@ class NewFaceDialog(Ui_Dialog, QDialog):
             "type":1,
             "data":data
         }
-        res = detectImage(params)
-        dataR = res.json()
-        if(res.status_code==200 and dataR.get('code')==0):
-            self.label_tip.setText("图片合格")
-            self.Error = False
-        else:
-            self.label_tip.setText("图片不合格")
-            self.base64_image = None
-            self.Error = True
+        try:
+            res = detectImage(params)
+            dataR = res.json()
+            if(res.status_code==200 and dataR.get('code')==0):
+                self.label_tip.setText("图片合格")
+                self.Error = False
+            else:
+                self.label_tip.setText("图片不合格")
+                self.base64_image = None
+                self.Error = True
+        except  ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def handleCancel(self):
         print("取消操作")

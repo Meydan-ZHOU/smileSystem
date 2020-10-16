@@ -1,6 +1,6 @@
 * {
     font-family: "Microsoft YaHei";
-    font-size:14px;
+    font-size:16px;
 }
 
 #Form_login{

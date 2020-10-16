@@ -57,6 +57,7 @@ class Ui_Form_login(object):
         self.lineEdit_password.setObjectName("lineEdit_password")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.lineEdit_password)
         self.login_btn = QtWidgets.QPushButton(Form_login)
+        self.login_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.login_btn.setObjectName("login_btn")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.SpanningRole, self.login_btn)
         self.label_login_title = QtWidgets.QLabel(Form_login)

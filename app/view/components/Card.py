@@ -60,7 +60,9 @@ class Card(Ui_Form,QWidget):
                 #widget_wrapper{
                     background-color:#191d2d;
                 }
-        
+                QLabel{
+                    font-size:14px;
+                }
                 #label_image1{
                     background-color:#191d2d;
                     color:#fff;

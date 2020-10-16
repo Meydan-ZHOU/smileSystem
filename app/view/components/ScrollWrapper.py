@@ -8,7 +8,7 @@ from view.components.Card import Card
 class ScrollWrapper(Ui_Form,QWidget):
     delete_data = pyqtSignal(dict)
     detail_data = pyqtSignal(dict)
-    def __init__(self,DataList,Col=6):
+    def __init__(self,DataList,Col=7):
         super(ScrollWrapper,self).__init__()
         self.setupUi(self)
         self.DataList = DataList

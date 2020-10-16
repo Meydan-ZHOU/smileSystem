@@ -6,7 +6,7 @@ from view.pages.dialog.AddLibraryDialog import AddLibraryDialog
 from view.pages.dialog.NewFaceDialog import NewFaceDialog
 
 from api.index import add_library,add_face, del_faces, delete_library
-from utils.common import msg_box
+from utils.common import msg_box,btn_set_pointer_cursor
 
 from view.components.ScrollWrapper import ScrollWrapper
 from view.components.Pagination import Pagination
@@ -22,25 +22,30 @@ class FaceLibraryPage(Ui_Form,QWidget):
         self.libraryList = None
         self.faceList = None
         self.currentLibrary = None
+        self.totalCount = 0
+        self.pageSize = 14
+        self.currentPage = 1
         self.initUI()
         self.dbHelper = DBHelper()
-        self.totalCount = 0
-        self.pageSize = 12
-        self.currentPage = 1
         self.createTable()
+
+    def getDatas(self):
+        self.totalCount = 0
+        self.pageSize = 14
+        self.currentPage = 1
         self.getLibraryList()
 
     def resizeEvent(self, event):
         width = self.size().width()
-        print("width", width)
         if (width > 1200):
             self.pageSize = 16
         else:
-            self.pageSize = 12
+            self.pageSize = 14
 
         self.getAllFacesList()
 
     def initUI(self):
+        self.setObjectName("faceLibrary")
         self.pushButton.setProperty('class', 'addButton')
 
     def getFaceTotalCount(self):
@@ -88,23 +93,27 @@ class FaceLibraryPage(Ui_Form,QWidget):
         params = {
             "face_lib_name":libraryName
         }
-        res = add_library(params)
-        if res:
-            result = res.json()
-            if(res.status_code == 200 and result.get('code')==0):
-                db_data = {
-                    "face_lib_name":libraryName,
-                    'face_lib_id':result.get('data').get('face_lib_id')
-                }
-                db_back = self.dbHelper.insert_library(db_data)
-                if(db_back):
-                    msg_box(self, "操作成功")
-                else:
-                    msg_box(self, "操作失败")
+        try:
+            res = add_library(params)
+            if res:
+                result = res.json()
+                if(res.status_code == 200 and result.get('code')==0):
+                    db_data = {
+                        "face_lib_name":libraryName,
+                        'face_lib_id':result.get('data').get('face_lib_id')
+                    }
+                    db_back = self.dbHelper.insert_library(db_data)
+                    if(db_back):
+                        msg_box(self, "操作成功")
+                    else:
+                        msg_box(self, "操作失败")
 
-                self.getLibraryList()
-            else:
-                msg_box(self,result.get('msg'))
+                    self.getLibraryList()
+                else:
+                    msg_box(self,result.get('msg'))
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def submitAddFace(self, data):
         lib_name, lib_id = data['library']
@@ -121,18 +130,21 @@ class FaceLibraryPage(Ui_Form,QWidget):
                 "tel": data['tel']
             }
         }
-
-        res = add_face(params)
-        if res:
-            result = res.json()
-            if(res.status_code==200 and result.get('code')==0):
-                data['face_id'] = result.get('data').get('face_id')
-                msg_box(self, "操作成功")
-                db_back = self.dbHelper.insert_library_face(data)
-                if(db_back):
-                    self.getAllFacesList()
-            else:
-                msg_box(self, result.get('msg'))
+        try:
+            res = add_face(params)
+            if res:
+                result = res.json()
+                if(res.status_code==200 and result.get('code')==0):
+                    data['face_id'] = result.get('data').get('face_id')
+                    msg_box(self, "操作成功")
+                    db_back = self.dbHelper.insert_library_face(data)
+                    if(db_back):
+                        self.getAllFacesList()
+                else:
+                    msg_box(self, result.get('msg'))
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def handleRefreshFace(self):
         self.getAllFacesList()
@@ -182,18 +194,22 @@ class FaceLibraryPage(Ui_Form,QWidget):
             "face_lib_id":lib_id,
             "face_ids":[face_id]
         }
-        res = del_faces(params)
-        if res:
-            result= res.json()
-            if(res.status_code==200 and result.get('code')==0):
-                db_back = self.dbHelper.delete_face(face_id,name,lib_name)
-                if(db_back):
-                    msg_box(self,"操作成功")
-                    self.getAllFacesList()
+        try:
+            res = del_faces(params)
+            if res:
+                result= res.json()
+                if(res.status_code==200 and result.get('code')==0):
+                    db_back = self.dbHelper.delete_face(face_id,name,lib_name)
+                    if(db_back):
+                        msg_box(self,"操作成功")
+                        self.getAllFacesList()
+                    else:
+                        msg_box(self,"操作失败")
                 else:
-                    msg_box(self,"操作失败")
-            else:
-                msg_box(self,result.get("msg"))
+                    msg_box(self,result.get("msg"))
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def addFaceLibraryBoxShow(self):
         self.dialog = AddLibraryDialog()
@@ -225,6 +241,7 @@ class FaceLibraryPage(Ui_Form,QWidget):
             btn.setFixedSize(50,25)
             btn.setProperty("data",(id,name))
             btn.clicked.connect(self.handleDeleteLibrary)
+            btn_set_pointer_cursor(btn)
             # 摄像头编辑按钮
             layout_main.addWidget(camera_text)
             layout_main.addWidget(btn)
@@ -238,18 +255,22 @@ class FaceLibraryPage(Ui_Form,QWidget):
         params = {
             "face_lib_ids":[id]
         }
-        res = delete_library(params)
-        if res:
-            result = res.json()
-            if(res.status_code==200 and result.get("code")==0):
-                db_back = self.dbHelper.delete_library(id,name)
-                if(db_back):
-                    msg_box(self, "操作成功")
-                    self.getLibraryList()
+        try:
+            res = delete_library(params)
+            if res:
+                result = res.json()
+                if(res.status_code==200 and result.get("code")==0):
+                    db_back = self.dbHelper.delete_library(id,name)
+                    if(db_back):
+                        msg_box(self, "操作成功")
+                        self.getLibraryList()
+                    else:
+                        msg_box(self, "操作失败")
                 else:
-                    msg_box(self, "操作失败")
-            else:
-                msg_box(self,result.get("msg"))
+                    msg_box(self,result.get("msg"))
+        except ConnectionError as e:
+            print(e)
+            msg_box(self,"服务器连接异常")
 
     def getLibraryList(self):
         db_back = self.dbHelper.select_all_library()

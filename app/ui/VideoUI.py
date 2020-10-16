@@ -61,6 +61,7 @@ class Ui_Form(object):
         self.pushButton_close = QtWidgets.QPushButton(self.widget_tools)
         self.pushButton_close.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_close.setMaximumSize(QtCore.QSize(20, 20))
+        self.pushButton_close.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_close.setStyleSheet("")
         self.pushButton_close.setObjectName("pushButton_close")
         self.horizontalLayout_2.addWidget(self.pushButton_close)

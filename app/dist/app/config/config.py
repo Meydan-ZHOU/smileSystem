@@ -15,6 +15,8 @@ def config_write(host):
 
 def get_server_ip():
     host = config_read()
+    if(host==''):
+        return ''
     ip = host.split('//')[1].split(':')[0]
     return ip
 

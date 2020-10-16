@@ -6,18 +6,20 @@ from PyQt5.QtGui import QPixmap
 from utils.common import displayOriginImage
 
 class FaceNotifyDetailPage(Ui_Form,QWidget):
-    def __init__(self,HomeLayout,data):
+    def __init__(self,HomeLayout):
         super(FaceNotifyDetailPage,self).__init__()
         self.setupUi(self)
         self.HomeLayout = HomeLayout
-        self.notify = data['notify']
+        self.notify = None
         self.initUI()
 
-    def initUI(self):
+    def getDatas(self):
+        if(self.notify == None):
+            return
         time_str,similarity_str,face_image,register_image,camera_name,face_lib_name,capture_image,face_name,camera_url = self.notify
         self.playImage(self.label_capture,capture_image)
-        displayOriginImage(self.label_register,register_image,200,None,True,200)
-        displayOriginImage(self.label_face,face_image,200,None,True,200)
+        displayOriginImage(self.label_register,register_image,200,None)
+        displayOriginImage(self.label_face,face_image,200,None)
 
         self.label_time.setText(time_str)
         self.label_camera_name.setText(camera_name)
@@ -25,6 +27,9 @@ class FaceNotifyDetailPage(Ui_Form,QWidget):
         self.label_name.setText(face_name)
         self.label_similaity.setText(similarity_str)
         self.label_face_lib.setText(face_lib_name)
+
+    def initUI(self):
+        self.setObjectName('faceNotifyDetail')
 
     def playImage(self,label,image):
         jpj1 = QPixmap(image)

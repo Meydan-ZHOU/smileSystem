@@ -72,6 +72,7 @@ class Ui_Dialog(object):
         self.horizontalLayout.addLayout(self.formLayout)
         self.verticalLayout.addWidget(self.widget)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
+        self.buttonBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
