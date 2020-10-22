@@ -11,15 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(999, 683)
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(Form)
+class Ui_Form_new_task(object):
+    def setupUi(self, Form_new_task):
+        Form_new_task.setObjectName("Form_new_task")
+        Form_new_task.resize(999, 683)
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(Form_new_task)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.widget_2 = QtWidgets.QWidget(Form)
+        self.widget_2 = QtWidgets.QWidget(Form_new_task)
         self.widget_2.setStyleSheet("")
         self.widget_2.setObjectName("widget_2")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget_2)
@@ -177,7 +177,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.addWidget(self.widget_5)
         self.verticalLayout_4.addWidget(self.widget)
         self.verticalLayout_5.addWidget(self.widget_2)
-        self.widget_6 = QtWidgets.QWidget(Form)
+        self.widget_6 = QtWidgets.QWidget(Form_new_task)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -200,21 +200,21 @@ class Ui_Form(object):
         self.horizontalLayout_4.addItem(spacerItem1)
         self.verticalLayout_5.addWidget(self.widget_6)
 
-        self.retranslateUi(Form)
-        self.pushButton_cancel.clicked.connect(Form.handleCancel)
-        self.pushButton_submit.clicked.connect(Form.handleSubmit)
-        self.doubleSpinBox_similarity.valueChanged['double'].connect(Form.smilarityChanged)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Form_new_task)
+        self.pushButton_cancel.clicked.connect(Form_new_task.handleCancel)
+        self.pushButton_submit.clicked.connect(Form_new_task.handleSubmit)
+        self.doubleSpinBox_similarity.valueChanged['double'].connect(Form_new_task.smilarityChanged)
+        QtCore.QMetaObject.connectSlotsByName(Form_new_task)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form_new_task):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_7.setText(_translate("Form", "人脸库"))
-        self.label_2.setText(_translate("Form", "摄像头列表"))
-        self.label_3.setText(_translate("Form", "摄像头预览"))
-        self.label_4.setText(_translate("Form", "其他参数"))
-        self.label_5.setText(_translate("Form", "相似度"))
-        self.pushButton_submit.setText(_translate("Form", "提交"))
-        self.pushButton_submit.setProperty("class", _translate("Form", "primary"))
-        self.pushButton_cancel.setText(_translate("Form", "取消"))
-        self.pushButton_cancel.setProperty("class", _translate("Form", "default"))
+        Form_new_task.setWindowTitle(_translate("Form_new_task", "Form"))
+        self.label_7.setText(_translate("Form_new_task", "face_library"))
+        self.label_2.setText(_translate("Form_new_task", "camera_list"))
+        self.label_3.setText(_translate("Form_new_task", "camera_preview"))
+        self.label_4.setText(_translate("Form_new_task", "other_setting"))
+        self.label_5.setText(_translate("Form_new_task", "similarity"))
+        self.pushButton_submit.setText(_translate("Form_new_task", "submit"))
+        self.pushButton_submit.setProperty("class", _translate("Form_new_task", "primary"))
+        self.pushButton_cancel.setText(_translate("Form_new_task", "cancel"))
+        self.pushButton_cancel.setProperty("class", _translate("Form_new_task", "default"))

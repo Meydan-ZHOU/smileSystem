@@ -11,15 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(1106, 705)
-        self.gridLayout = QtWidgets.QGridLayout(Form)
+class Ui_Form_library(object):
+    def setupUi(self, Form_library):
+        Form_library.setObjectName("Form_library")
+        Form_library.resize(1106, 705)
+        self.gridLayout = QtWidgets.QGridLayout(Form_library)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.widget_2 = QtWidgets.QWidget(Form)
+        self.widget_2 = QtWidgets.QWidget(Form_library)
         self.widget_2.setObjectName("widget_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.widget_2)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -92,7 +92,7 @@ class Ui_Form(object):
         spacerItem = QtWidgets.QSpacerItem(5, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem)
         self.pushButton_ = QtWidgets.QPushButton(self.widget_3)
-        self.pushButton_.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.pushButton_.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.pushButton_.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_.setObjectName("pushButton_")
         self.horizontalLayout_6.addWidget(self.pushButton_)
@@ -125,19 +125,19 @@ class Ui_Form(object):
         self.gridLayout_2.addWidget(self.widget_right, 0, 1, 1, 1)
         self.gridLayout.addWidget(self.widget_2, 0, 0, 1, 1)
 
-        self.retranslateUi(Form)
-        self.pushButton.clicked.connect(Form.addFaceLibraryBoxShow)
-        self.pushButton_new_face.clicked.connect(Form.newFaceBoxShow)
-        self.pushButton_.clicked.connect(Form.handleRefreshFace)
-        self.listWidget.itemClicked['QListWidgetItem*'].connect(Form.handleLibraryChanged)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Form_library)
+        self.pushButton.clicked.connect(Form_library.addFaceLibraryBoxShow)
+        self.pushButton_new_face.clicked.connect(Form_library.newFaceBoxShow)
+        self.pushButton_.clicked.connect(Form_library.handleRefreshFace)
+        self.listWidget.itemClicked['QListWidgetItem*'].connect(Form_library.handleLibraryChanged)
+        QtCore.QMetaObject.connectSlotsByName(Form_library)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form_library):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_face_library.setText(_translate("Form", "人脸库"))
-        self.pushButton.setText(_translate("Form", "+"))
-        self.pushButton_new_face.setText(_translate("Form", "新建人脸"))
-        self.pushButton_new_face.setProperty("class", _translate("Form", "primary"))
-        self.pushButton_.setText(_translate("Form", "刷新人脸"))
-        self.pushButton_.setProperty("class", _translate("Form", "default"))
+        Form_library.setWindowTitle(_translate("Form_library", "Form"))
+        self.label_face_library.setText(_translate("Form_library", "face_library"))
+        self.pushButton.setText(_translate("Form_library", "+"))
+        self.pushButton_new_face.setText(_translate("Form_library", "new_face"))
+        self.pushButton_new_face.setProperty("class", _translate("Form_library", "primary"))
+        self.pushButton_.setText(_translate("Form_library", "update_face"))
+        self.pushButton_.setProperty("class", _translate("Form_library", "default"))

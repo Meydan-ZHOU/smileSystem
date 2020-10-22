@@ -9,10 +9,6 @@ class AddLibraryDialog(Ui_Dialog, QDialog):
         super(AddLibraryDialog, self).__init__()
         self.setupUi(self)
         self.initSlot()
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle("添加人脸库")
 
     def initSlot(self):
         self.buttonBox.accepted.disconnect(self.accept)

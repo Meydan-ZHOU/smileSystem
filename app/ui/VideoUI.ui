@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Form_video</class>
+ <widget class="QWidget" name="Form_video">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -68,7 +68,7 @@
          <number>0</number>
         </property>
         <property name="text">
-         <string>请点击左侧流进行播放</string>
+         <string>please_click_left</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -130,7 +130,7 @@
       <item>
        <widget class="QLabel" name="label_camera_name">
         <property name="text">
-         <string>摄像头名字</string>
+         <string/>
         </property>
        </widget>
       </item>

@@ -8,12 +8,12 @@ from view.components.Card import Card
 class ScrollWrapper(Ui_Form,QWidget):
     delete_data = pyqtSignal(dict)
     detail_data = pyqtSignal(dict)
-    def __init__(self,DataList,Col=7):
+    def __init__(self,DataList,Col=5):
         super(ScrollWrapper,self).__init__()
         self.setupUi(self)
         self.DataList = DataList
         self.updating = True
-        self.Col = Col
+        self.Col = int(Col)
 
     def chunk(self, l, chunk_size):
         return [l[x:x + chunk_size] for x in range(0, len(l), chunk_size)]
@@ -24,10 +24,7 @@ class ScrollWrapper(Ui_Form,QWidget):
     def initUI(self):
         wrapper_w = self.width()
         print("wrapper_w", wrapper_w)
-        if (wrapper_w > 1200):
-            col = 8
-        else:
-            col = self.Col
+        col = self.Col
         contents_w = wrapper_w
         # print("contents_w", contents_w)
 

@@ -11,19 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(1000, 729)
-        Form.setStyleSheet("color:#a4a5a8;")
-        self.gridLayout_2 = QtWidgets.QGridLayout(Form)
+class Ui_Form_live(object):
+    def setupUi(self, Form_live):
+        Form_live.setObjectName("Form_live")
+        Form_live.resize(1000, 729)
+        Form_live.setStyleSheet("color:#a4a5a8;")
+        self.gridLayout_2 = QtWidgets.QGridLayout(Form_live)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(5)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.widget_left = QtWidgets.QWidget(Form)
+        self.widget_left = QtWidgets.QWidget(Form_live)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -75,7 +75,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.listWidget)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
         self.horizontalLayout_2.addWidget(self.widget_left)
-        self.widget_video_show = QtWidgets.QWidget(Form)
+        self.widget_video_show = QtWidgets.QWidget(Form_live)
         self.widget_video_show.setStyleSheet("")
         self.widget_video_show.setObjectName("widget_video_show")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.widget_video_show)
@@ -89,16 +89,16 @@ class Ui_Form(object):
         self.horizontalLayout_2.addWidget(self.widget_video_show)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
 
-        self.retranslateUi(Form)
-        self.pushButton_add_camera.clicked.connect(Form.addCameraDialogShow)
-        self.listWidget.itemClicked['QListWidgetItem*'].connect(Form.handleCameraChanged)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Form_live)
+        self.pushButton_add_camera.clicked.connect(Form_live.addCameraDialogShow)
+        self.listWidget.itemClicked['QListWidgetItem*'].connect(Form_live.handleCameraChanged)
+        QtCore.QMetaObject.connectSlotsByName(Form_live)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form_live):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.pushButton_onvif.setText(_translate("Form", "ONVIF搜索设备"))
-        self.label_title.setText(_translate("Form", "摄像头列表"))
-        self.pushButton_add_camera.setText(_translate("Form", "+"))
-        self.pushButton_add_camera.setProperty("class", _translate("Form", "addButton"))
+        Form_live.setWindowTitle(_translate("Form_live", "Form"))
+        self.pushButton_onvif.setText(_translate("Form_live", "Onvif Search Device"))
+        self.label_title.setText(_translate("Form_live", "Camera List"))
+        self.pushButton_add_camera.setText(_translate("Form_live", "+"))
+        self.pushButton_add_camera.setProperty("class", _translate("Form_live", "addButton"))
         self.listWidget.setSortingEnabled(True)

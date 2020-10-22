@@ -28,7 +28,7 @@ class Ui_Form_home(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.widget_top.sizePolicy().hasHeightForWidth())
         self.widget_top.setSizePolicy(sizePolicy)
-        self.widget_top.setMaximumSize(QtCore.QSize(16777215, 70))
+        self.widget_top.setMaximumSize(QtCore.QSize(16777215, 60))
         self.widget_top.setObjectName("widget_top")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_top)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)

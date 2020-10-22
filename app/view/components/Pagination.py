@@ -1,5 +1,5 @@
 import math
-from PyQt5.QtWidgets import QWidget,QHBoxLayout,QPushButton,QLabel,QMessageBox,QLineEdit
+from PyQt5.QtWidgets import QWidget,QHBoxLayout,QPushButton,QLabel,QMessageBox,QLineEdit,qApp
 from PyQt5.QtCore import pyqtSignal
 
 from utils.common import btn_set_pointer_cursor
@@ -8,6 +8,7 @@ class Pagination(QWidget):
     current_page_change = pyqtSignal(int)
     def __init__(self,total,size,current_page):
         super(Pagination,self).__init__()
+        self._tr = qApp.translate
         self.total = total
         self.size = size
         self.current_page = current_page
@@ -17,18 +18,18 @@ class Pagination(QWidget):
     def initUI(self,total,size,current_page):
         self.totalPage = math.ceil(total/size)
         h = QHBoxLayout(self)
-        self.totalLabel = QLabel('共 ' + str(total) + ' 条')
-        homePageBtn = QPushButton("首页")
-        prePageBtn = QPushButton("上一页")
+        self.totalLabel = QLabel(self._tr("Form", "total") +' '+ str(total)+' ' + self._tr("Form", "tiao"))
+        homePageBtn = QPushButton(self._tr("Form", "home_page"))
+        prePageBtn = QPushButton(self._tr("Form", "prev"))
         self.curPageLabel = QLabel(str(current_page))
         self.totalPageLabel = QLabel('/ ' + str(self.totalPage))
-        nextPageBtn = QPushButton("下一页")
-        finalPageBtn = QPushButton("尾页")
-        skipLable_0 = QLabel("跳到")
+        nextPageBtn = QPushButton(self._tr("Form", "next"))
+        finalPageBtn = QPushButton(self._tr("Form", "latest_page"))
+        skipLable_0 = QLabel(self._tr("Form", "jump"))
         self.skipPage = QLineEdit()
         self.skipPage.setMaximumWidth(40)
-        skipLabel_1 = QLabel("页")
-        confirmSkip = QPushButton("确定")
+        skipLabel_1 = QLabel(self._tr("Form", "page"))
+        confirmSkip = QPushButton(self._tr("Form", "sure"))
 
         btn_set_pointer_cursor(homePageBtn)
         btn_set_pointer_cursor(prePageBtn)
@@ -72,17 +73,19 @@ class Pagination(QWidget):
         self.control_signal('skip')
 
     def control_signal(self,type):
+        if self.totalPage == 0:
+            return
         if 'home'==type:
             self.current_page = 1
         elif 'pre'==type:
             if 1==self.current_page:
-                QMessageBox.information(self,'提示','已经是第一页了',QMessageBox.Yes)
+                QMessageBox.information(self,self._tr("Form", "tips"),self._tr("Form", "is_home_page"),QMessageBox.Yes)
                 return
             self.current_page = self.current_page-1
 
         elif 'next'==type:
             if(self.totalPage==self.current_page):
-                QMessageBox.information(self, "提示", "已经是最后一页了", QMessageBox.Yes)
+                QMessageBox.information(self,self._tr("Form", "tips"),self._tr("Form", "is_latest_page"), QMessageBox.Yes)
                 return
             self.current_page = self.current_page + 1
         elif 'final'==type:
@@ -95,7 +98,7 @@ class Pagination(QWidget):
             num = int(skipStr)
             print(num)
             if self.totalPage < num or num < 0:
-                QMessageBox.information(self, "提示", "跳转页码超出范围", QMessageBox.Yes)
+                QMessageBox.information(self,self._tr("Form", "tips"), self._tr("Form", "over_page_range"), QMessageBox.Yes)
                 return
             self.current_page = num
 

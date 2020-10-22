@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QDialog,qApp
 from PyQt5.QtCore import pyqtSignal
 from ui.AddCameraDialogUI import Ui_Dialog
 
@@ -9,6 +9,7 @@ class AddCameraDialog(Ui_Dialog, QDialog):
     def __init__(self,Data=None):
         super(AddCameraDialog, self).__init__()
         self.setupUi(self)
+        self._tr = qApp.translate
         self.Data = Data
         self.initSlot()
         self.initUI()
@@ -16,11 +17,11 @@ class AddCameraDialog(Ui_Dialog, QDialog):
 
     def initUI(self):
         if(self.Data == None):
-            self.setWindowTitle("添加摄像头")
-            self.pushButton_cancel.setText('Cancel')
+            self.setWindowTitle(self._tr('Form','newCamera'))
+            self.pushButton_cancel.setText(self._tr('Form','cancel'))
         else:
-            self.setWindowTitle("编辑摄像头")
-            self.pushButton_cancel.setText('Delete')
+            self.setWindowTitle(self._tr('Form','editCamera'))
+            self.pushButton_cancel.setText(self._tr('Form','delete'))
 
     def initData(self):
         data = self.Data

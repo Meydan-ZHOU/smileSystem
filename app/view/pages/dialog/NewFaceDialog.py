@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QDialog,qApp,QFileDialog
 from ui.NewFaceUI import Ui_Dialog
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSignal
@@ -12,6 +12,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
     def __init__(self,libraryList):
         super(NewFaceDialog, self).__init__()
         self.setupUi(self)
+        self._tr = qApp.translate
         self.libraryList = libraryList
         self.initData()
         self.updateLibraryComboboxUI()
@@ -27,7 +28,6 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         pass
 
     def initUI(self):
-        self.setWindowTitle("添加人脸")
         displayOriginImage(self.label_image, "static/images/faceIcon.png",None,300)
         self.label_image.setScaledContents(True)
 
@@ -53,7 +53,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
 
     def openImage(self):
         try:
-            imgName, imgType ,= QFileDialog.getOpenFileName(self, "打开图片", "", 'Image Files(*.png *.jpg *.bmp)')
+            imgName, imgType ,= QFileDialog.getOpenFileName(self, self._tr('Form','choose_image'), "", 'Image Files(*.png *.jpg *.bmp)')
             jpg = QPixmap(imgName)
             print("imgName",imgName)
             if(imgName==''):
@@ -65,7 +65,6 @@ class NewFaceDialog(Ui_Dialog, QDialog):
             self.base64_image = str(base64.b64encode(data),"utf-8")
             self.handleDetectImage(self.base64_image)
         except (ConnectionError):
-            print("上传图片中断错误")
             return
 
     def handleSubmit(self):
@@ -73,15 +72,15 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         age = self.lineEdit_age.text()
         tel = self.lineEdit_tel.text()
         if(self.radioButton_female.isChecked()==True):
-            sex = "女"
+            sex = self._tr("Dialog", "female")
         else:
-            sex = "男"
+            sex = self._tr("Dialog", "male")
 
         if(name==''):
-            msg_box(self,"姓名不能为空")
+            msg_box(self,self._tr('Form','please_enter_name'))
             return
         if(self.base64_image==None):
-            msg_box(self,"请上传合格的头像")
+            msg_box(self,self._tr('Form','please_upload_right_photo'))
             return
 
         params = {
@@ -98,7 +97,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
             self.accept()
             self.submit_add_face.emit(params)
         else:
-            msg_box(self,"操作有误！")
+            msg_box(self,self._tr('Form','operate_error'))
 
     def handleDetectImage(self,data):
         params = {
@@ -109,15 +108,15 @@ class NewFaceDialog(Ui_Dialog, QDialog):
             res = detectImage(params)
             dataR = res.json()
             if(res.status_code==200 and dataR.get('code')==0):
-                self.label_tip.setText("图片合格")
+                self.label_tip.setText(self._tr('Form','photo_right'))
                 self.Error = False
             else:
-                self.label_tip.setText("图片不合格")
+                self.label_tip.setText(self._tr('Form','photo_error'))
                 self.base64_image = None
                 self.Error = True
         except  ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr('Form','server_connect_error'))
 
     def handleCancel(self):
-        print("取消操作")
+        pass

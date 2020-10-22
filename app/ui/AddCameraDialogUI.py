@@ -15,6 +15,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(416, 393)
+        Dialog.setWindowTitle("")
         self.gridLayout_3 = QtWidgets.QGridLayout(Dialog)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -93,12 +94,11 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "名称"))
+        self.label.setText(_translate("Dialog", "name"))
         self.label_2.setText(_translate("Dialog", "ip"))
         self.label_3.setText(_translate("Dialog", "sn"))
-        self.label_5.setText(_translate("Dialog", "用户名"))
-        self.label_4.setText(_translate("Dialog", "密码"))
-        self.label_6.setText(_translate("Dialog", "地址"))
+        self.label_5.setText(_translate("Dialog", "username"))
+        self.label_4.setText(_translate("Dialog", "password"))
+        self.label_6.setText(_translate("Dialog", "url"))
         self.pushButton_submit.setText(_translate("Dialog", "Submit"))
         self.pushButton_cancel.setText(_translate("Dialog", "Cancel"))

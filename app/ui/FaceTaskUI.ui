@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Form_new_task</class>
+ <widget class="QWidget" name="Form_new_task">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -68,7 +68,7 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>人脸库</string>
+            <string>face_library</string>
            </property>
           </widget>
          </item>
@@ -172,7 +172,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>摄像头列表</string>
+                 <string>camera_list</string>
                 </property>
                </widget>
               </item>
@@ -253,7 +253,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>摄像头预览</string>
+                 <string>camera_preview</string>
                 </property>
                </widget>
               </item>
@@ -358,7 +358,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>其他参数</string>
+                 <string>other_setting</string>
                 </property>
                </widget>
               </item>
@@ -406,7 +406,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>相似度</string>
+                      <string>similarity</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
@@ -469,7 +469,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>提交</string>
+         <string>submit</string>
         </property>
         <property name="class" stdset="0">
          <string>primary</string>
@@ -482,7 +482,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>取消</string>
+         <string>cancel</string>
         </property>
         <property name="class" stdset="0">
          <string>default</string>
@@ -512,7 +512,7 @@
   <connection>
    <sender>pushButton_cancel</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_new_task</receiver>
    <slot>handleCancel()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -528,7 +528,7 @@
   <connection>
    <sender>pushButton_submit</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_new_task</receiver>
    <slot>handleSubmit()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -544,7 +544,7 @@
   <connection>
    <sender>doubleSpinBox_similarity</sender>
    <signal>valueChanged(double)</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_new_task</receiver>
    <slot>smilarityChanged()</slot>
    <hints>
     <hint type="sourcelabel">

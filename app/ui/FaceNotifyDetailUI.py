@@ -11,15 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(1077, 652)
-        self.gridLayout = QtWidgets.QGridLayout(Form)
+class Ui_Form_notify_detail(object):
+    def setupUi(self, Form_notify_detail):
+        Form_notify_detail.setObjectName("Form_notify_detail")
+        Form_notify_detail.resize(1077, 652)
+        self.gridLayout = QtWidgets.QGridLayout(Form_notify_detail)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.widget = QtWidgets.QWidget(Form)
+        self.widget = QtWidgets.QWidget(Form_notify_detail)
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -38,6 +38,7 @@ class Ui_Form(object):
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.label_capture = QtWidgets.QLabel(self.widget_1)
+        self.label_capture.setText("")
         self.label_capture.setAlignment(QtCore.Qt.AlignCenter)
         self.label_capture.setObjectName("label_capture")
         self.gridLayout_2.addWidget(self.label_capture, 0, 0, 1, 1)
@@ -111,26 +112,25 @@ class Ui_Form(object):
         self.horizontalLayout.setStretch(1, 1)
         self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Form_notify_detail)
+        QtCore.QMetaObject.connectSlotsByName(Form_notify_detail)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form_notify_detail):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_capture.setText(_translate("Form", "捕获图片"))
-        self.label.setText(_translate("Form", "摄像头名称："))
-        self.label_camera_name.setText(_translate("Form", "TextLabel"))
-        self.label_2.setText(_translate("Form", "摄像头地址："))
-        self.label_camera_url.setText(_translate("Form", "TextLabel"))
-        self.label_3.setText(_translate("Form", "捕获时间："))
-        self.label_time.setText(_translate("Form", "TextLabel"))
-        self.label_7.setText(_translate("Form", "注册人脸："))
-        self.label_8.setText(_translate("Form", "捕获人脸："))
-        self.label_register.setText(_translate("Form", "TextLabel"))
-        self.label_face.setText(_translate("Form", "TextLabel"))
-        self.label_face_lib.setText(_translate("Form", "TextLabel"))
-        self.label_4.setText(_translate("Form", "人脸库："))
-        self.label_similaity.setText(_translate("Form", "TextLabel"))
-        self.label_5.setText(_translate("Form", "相似度："))
-        self.label_6.setText(_translate("Form", "名字："))
-        self.label_name.setText(_translate("Form", "TextLabel"))
+        Form_notify_detail.setWindowTitle(_translate("Form_notify_detail", "Form"))
+        self.label.setText(_translate("Form_notify_detail", "camera_name"))
+        self.label_camera_name.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_2.setText(_translate("Form_notify_detail", "camera_url"))
+        self.label_camera_url.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_3.setText(_translate("Form_notify_detail", "capture_time"))
+        self.label_time.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_7.setText(_translate("Form_notify_detail", "register_face"))
+        self.label_8.setText(_translate("Form_notify_detail", "capture_face"))
+        self.label_register.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_face.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_face_lib.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_4.setText(_translate("Form_notify_detail", "face_library"))
+        self.label_similaity.setText(_translate("Form_notify_detail", "TextLabel"))
+        self.label_5.setText(_translate("Form_notify_detail", "similarity"))
+        self.label_6.setText(_translate("Form_notify_detail", "name"))
+        self.label_name.setText(_translate("Form_notify_detail", "TextLabel"))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Form_library</class>
+ <widget class="QWidget" name="Form_library">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -111,7 +111,7 @@
                 <item>
                  <widget class="QLabel" name="label_face_library">
                   <property name="text">
-                   <string>人脸库</string>
+                   <string>face_library</string>
                   </property>
                  </widget>
                 </item>
@@ -211,7 +211,7 @@
                 <widget class="QPushButton" name="pushButton_new_face">
                  <property name="maximumSize">
                   <size>
-                   <width>100</width>
+                   <width>16777215</width>
                    <height>16777215</height>
                   </size>
                  </property>
@@ -219,7 +219,7 @@
                   <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="text">
-                  <string>新建人脸</string>
+                  <string>new_face</string>
                  </property>
                  <property name="class" stdset="0">
                   <string>primary</string>
@@ -246,7 +246,7 @@
                 <widget class="QPushButton" name="pushButton_">
                  <property name="maximumSize">
                   <size>
-                   <width>100</width>
+                   <width>16777215</width>
                    <height>16777215</height>
                   </size>
                  </property>
@@ -254,7 +254,7 @@
                   <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="text">
-                  <string>刷新人脸</string>
+                  <string>update_face</string>
                  </property>
                  <property name="class" stdset="0">
                   <string>default</string>
@@ -350,7 +350,7 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_library</receiver>
    <slot>addFaceLibraryBoxShow()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -366,7 +366,7 @@
   <connection>
    <sender>pushButton_new_face</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_library</receiver>
    <slot>newFaceBoxShow()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -382,7 +382,7 @@
   <connection>
    <sender>pushButton_</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_library</receiver>
    <slot>handleRefreshFace()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -398,7 +398,7 @@
   <connection>
    <sender>listWidget</sender>
    <signal>itemClicked(QListWidgetItem*)</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_library</receiver>
    <slot>handleLibraryChanged()</slot>
    <hints>
     <hint type="sourcelabel">

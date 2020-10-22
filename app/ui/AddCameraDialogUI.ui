@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
@@ -60,7 +60,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>名称</string>
+             <string>name</string>
             </property>
            </widget>
           </item>
@@ -90,7 +90,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>用户名</string>
+             <string>username</string>
             </property>
            </widget>
           </item>
@@ -100,7 +100,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>密码</string>
+             <string>password</string>
             </property>
            </widget>
           </item>
@@ -110,7 +110,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>地址</string>
+             <string>url</string>
             </property>
            </widget>
           </item>

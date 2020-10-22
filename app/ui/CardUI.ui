@@ -185,17 +185,8 @@ color:#fff;</string>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
               <widget class="QLabel" name="label_image1">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
                <property name="text">
-                <string>图片1</string>
+                <string>TextLabel</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -204,11 +195,8 @@ color:#fff;</string>
              </item>
              <item>
               <widget class="QLabel" name="label_image2">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
                <property name="text">
-                <string>图片2</string>
+                <string>TextLabel</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -273,17 +261,20 @@ color:#fff;</string>
              <property name="horizontalSpacing">
               <number>0</number>
              </property>
+             <property name="verticalSpacing">
+              <number>10</number>
+             </property>
              <property name="leftMargin">
-              <number>5</number>
+              <number>0</number>
              </property>
              <property name="topMargin">
-              <number>10</number>
+              <number>0</number>
              </property>
              <property name="rightMargin">
-              <number>5</number>
+              <number>0</number>
              </property>
              <property name="bottomMargin">
-              <number>10</number>
+              <number>0</number>
              </property>
             </layout>
            </item>

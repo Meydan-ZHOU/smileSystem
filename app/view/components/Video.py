@@ -1,16 +1,18 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget,qApp
 import av, os, threading,time
-from ui.VideoUI import Ui_Form
+from ui.VideoUI import Ui_Form_video
 from PyQt5.QtGui import QImage, QPixmap,QMovie
+from PyQt5.QtCore import QCoreApplication
 import numpy as np
 
 mu = threading.Lock()
 
-class Video(Ui_Form,QWidget):
+class Video(Ui_Form_video,QWidget):
     def __init__(self):
         super(Video,self).__init__()
         self.setupUi(self)
         # 创建一个关闭事件并设为未触发
+        self._tr = qApp.translate
         self.initUI()
         self.initSlot()
         self.player = {}
@@ -19,10 +21,13 @@ class Video(Ui_Form,QWidget):
         self.threadList = []
         print("video 进程pid:", os.getpid())
 
+    def resizeEvent(self, event):
+        self.label.setScaledContents(True)
+
     def initUI(self):
         self.width = self.size().width()
         self.height = self.size().height()
-        self.label.setText("请点击左侧摄像头进行播放")
+        self.label.setText(self._tr('Form_video', 'please_click_left'))
         self.label.setStyleSheet("background-color:transparent;")
         self.widget_tools.hide()
 
@@ -42,9 +47,6 @@ class Video(Ui_Form,QWidget):
         if url=='' or self.currentUrl == url:
             print("==============尚未结束===================")
             return
-
-        if(not self.currentUrl == url):
-            print("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
 
         self.initUI()
         self.isLoading()
@@ -67,7 +69,7 @@ class Video(Ui_Form,QWidget):
 
     def PlayError(self):
         self.isClosing = False
-        self.label.setText("视频打开异常")
+        self.label.setText(self._tr("Form", "video_open_error"))
         self.label.setProperty('class', 'error')
         self.widget_tools.hide()
 

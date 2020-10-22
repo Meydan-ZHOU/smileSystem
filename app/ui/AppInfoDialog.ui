@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>app_info</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -63,7 +63,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Axstream SDK 版本</string>
+             <string>sdk_ver</string>
             </property>
            </widget>
           </item>
@@ -92,7 +92,7 @@
              </size>
             </property>
             <property name="text">
-             <string>人脸识别软件版本</string>
+             <string>face_recognize_ver</string>
             </property>
            </widget>
           </item>
@@ -121,7 +121,7 @@
              </size>
             </property>
             <property name="text">
-             <string>人脸库管理软件版本</string>
+             <string>face_manage_ver</string>
             </property>
            </widget>
           </item>
@@ -144,12 +144,86 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>服务器地址</string>
+             <string>server_address</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
            <widget class="QLineEdit" name="lineEdit_server_ip"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>language</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QWidget" name="widget_2" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QRadioButton" name="radioButton_en">
+                 <property name="text">
+                  <string>english</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_cn">
+                 <property name="text">
+                  <string>chinese</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_3" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </item>
@@ -182,8 +256,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>277</x>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -198,8 +272,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>345</x>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -207,5 +281,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>radioButton_cn</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>languageToggle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>629</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>languageToggle(bool)</slot>
+ </slots>
 </ui>

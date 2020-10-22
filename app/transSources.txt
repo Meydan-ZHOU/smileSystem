@@ -1,0 +1,18 @@
+TRANSLATIONS = appLang_CN.ts\
+               appLang_EN.ts
+
+SOURCES += ./ui/LoginUI.py\
+           ./ui/HeaderUI.py\
+           ./ui/LiveUI.py\
+           ./ui/VideoUI.py\
+           ./ui/TranslatorUI.py\
+           ./view/pages/Live.py\
+           ./ui/AddCameraDialogUI.py\
+           ./ui/AddLibraryDialogUI.py\
+           ./ui/FaceTaskUI.py\
+           ./ui/FaceLibrary.py\
+           ./ui/NewFaceUI.py\
+           ./ui/TaskNotifyUI.py\
+           ./ui/FaceNotifyDetailUI.py\
+           ./ui/AppInfoDialog.py\
+           ./ui/FaceUI.py

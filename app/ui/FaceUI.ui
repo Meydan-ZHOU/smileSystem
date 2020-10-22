@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Form_face</class>
+ <widget class="QWidget" name="Form_face">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -47,7 +47,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>人脸识别</string>
+         <string>face_recognize</string>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -55,15 +55,9 @@
        </widget>
       </item>
       <item>
-       <widget class="Line" name="line">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>15</height>
-         </size>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>&gt;</string>
         </property>
        </widget>
       </item>
@@ -73,7 +67,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>PushButton</string>
+         <string/>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -81,22 +75,19 @@
        </widget>
       </item>
       <item>
-       <widget class="Line" name="line_2">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>15</height>
-         </size>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>&gt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>任务列表</string>
+         <string/>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -119,7 +110,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>新建任务</string>
+         <string>new_task</string>
         </property>
         <property name="class" stdset="0">
          <string>primary</string>
@@ -135,7 +126,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
-         <string>人脸管理</string>
+         <string>face_manage</string>
         </property>
         <property name="class" stdset="0">
          <string>primary</string>
@@ -164,7 +155,7 @@
   <connection>
    <sender>pushButton_face_back_2</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_face</receiver>
    <slot>goFaceMain()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -180,7 +171,7 @@
   <connection>
    <sender>pushButton_5</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_face</receiver>
    <slot>goFaceTaskPage()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -196,7 +187,7 @@
   <connection>
    <sender>pushButton_4</sender>
    <signal>clicked()</signal>
-   <receiver>Form</receiver>
+   <receiver>Form_face</receiver>
    <slot>goLibraryManagementPage()</slot>
    <hints>
     <hint type="sourcelabel">

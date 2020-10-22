@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget,QStackedWidget
+from PyQt5.QtWidgets import QWidget,QStackedWidget,QApplication,QDesktopWidget
 from PyQt5.QtCore import Qt
 from ui.HomeLayoutUI import Ui_Form_home
 from utils.common import SYS_STYLE_COMMON
@@ -14,13 +14,25 @@ class HomeWindow(Ui_Form_home,QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)  # 隐藏边框
         # 鼠标跟踪
         self.setMouseTracking(True)
+        self.initSize(0.75)
         self.initUI()
         self.initHeader()
         self.initStackedWidget()
         self.initSlot()
 
+    def initSize(self,rate):
+        desktop = QApplication.desktop().screenGeometry()
+        self.winWidth = desktop.width() * rate
+        self.winHeight = desktop.height() * rate
+        print("screen width is %d height is %d",
+              (self.winWidth, self.winHeight))
+        self.resize(self.winWidth, self.winHeight)
+
+        screen = QDesktopWidget().screenGeometry()
+        self.move((screen.width() - self.winWidth + 100)/2,
+                  (screen.height() - self.winHeight -30)/2)
+
     def initUI(self):
-        self.setWindowTitle("人脸识别系统")
         self.setStyleSheet(SYS_STYLE_COMMON)
 
     def initHeader(self):

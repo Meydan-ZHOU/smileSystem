@@ -1,8 +1,8 @@
 * {
     padding:0;
     margin:0;
-    font-family: "Microsoft YaHei";
-    font-size:16px;
+    font-family: "System,Microsoft YaHei UI,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji";
+    font-size:14px;
 	color:#a4a5a8;
 }
 #Form_home{
@@ -11,7 +11,7 @@
 }
 #label_system_title{
     color:#fff;
-    font-size:20px;
+    font-size:18px;
 }
 
 #widget_top{
@@ -28,7 +28,7 @@
     background-color:transparent;
     color:#a4a5a8;
     border:none;
-    font-size:16px;
+    font-size:14px;
 }
 
 #widget_nav QPushButton:hover,#widget_nav QPushButton:focus,#widget_nav QPushButton[class="active"]{
@@ -38,14 +38,14 @@
 
 /*按钮样式*/
 QPushButton{
-    border-radius:4px;
-    margin-right:5px;
+    font-size:12px;
+    border-radius:2px;
     cursor:pointer;
-    padding:2px 6px;
+    padding:4px 6px;
 }
 
 QPushButton[sizeBtn='medium']{
-    padding:4px 8px;
+    padding:6px 8px;
     margin-right:10px;
 }
 

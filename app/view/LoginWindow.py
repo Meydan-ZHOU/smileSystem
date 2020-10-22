@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget,QApplication,QDesktopWidget
 from ui.LoginUI import Ui_Form_login
 from view.HomeLayout import HomeWindow
 from utils.common import SYS_STYLE_LOGIN
@@ -9,7 +9,7 @@ class LoginWindow(Ui_Form_login,QWidget):
     def __init__(self, parent=None):
         super(LoginWindow, self).__init__(parent)
         self.setupUi(self)
-        self.resize(450, 350)
+        self.setFixedSize(480,480)
         self.Username = "admin"
         self.Password = "12345678"
         self.setAutoFillBackground(True)
@@ -18,6 +18,10 @@ class LoginWindow(Ui_Form_login,QWidget):
         self.initSlot()
         print("我是登录页面")
 
+    def center(self):
+        screen = QDesktopWidget().screenGeometry()
+        self.move((screen.width() - self.width()) / 2,
+                  (screen.height() - self.height()) / 2)
 
     def initUI(self):
         self.setStyleSheet(SYS_STYLE_LOGIN)

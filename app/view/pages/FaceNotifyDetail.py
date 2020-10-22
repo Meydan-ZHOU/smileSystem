@@ -1,11 +1,11 @@
 import time
 from PyQt5.QtWidgets import QWidget
-from ui.FaceNotifyDetailUI import Ui_Form
+from ui.FaceNotifyDetailUI import Ui_Form_notify_detail
 from PyQt5.QtGui import QPixmap
 
 from utils.common import displayOriginImage
 
-class FaceNotifyDetailPage(Ui_Form,QWidget):
+class FaceNotifyDetailPage(Ui_Form_notify_detail,QWidget):
     def __init__(self,HomeLayout):
         super(FaceNotifyDetailPage,self).__init__()
         self.setupUi(self)

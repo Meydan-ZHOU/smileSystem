@@ -11,22 +11,22 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(1011, 791)
-        self.gridLayout = QtWidgets.QGridLayout(Form)
+class Ui_Form_notify(object):
+    def setupUi(self, Form_notify):
+        Form_notify.setObjectName("Form_notify")
+        Form_notify.resize(1011, 791)
+        self.gridLayout = QtWidgets.QGridLayout(Form_notify)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.widget = QtWidgets.QWidget(Form)
+        self.widget = QtWidgets.QWidget(Form_notify)
         self.widget.setObjectName("widget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.widget_tool = QtWidgets.QWidget(self.widget)
-        self.widget_tool.setMinimumSize(QtCore.QSize(0, 40))
-        self.widget_tool.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.widget_tool.setMinimumSize(QtCore.QSize(0, 50))
+        self.widget_tool.setMaximumSize(QtCore.QSize(16777215, 50))
         self.widget_tool.setObjectName("widget_tool")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_tool)
         self.horizontalLayout_3.setSpacing(8)
@@ -69,7 +69,7 @@ class Ui_Form(object):
         self.horizontalLayout_3.addWidget(self.pushButton_search)
         self.pushButton_update = QtWidgets.QPushButton(self.widget_tool)
         self.pushButton_update.setMinimumSize(QtCore.QSize(80, 0))
-        self.pushButton_update.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pushButton_update.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.pushButton_update.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_update.setProperty("sizeBtn", "")
         self.pushButton_update.setObjectName("pushButton_update")
@@ -107,17 +107,17 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.widget_pagination)
         self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Form_notify)
+        QtCore.QMetaObject.connectSlotsByName(Form_notify)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Form_notify):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "姓名"))
-        self.label_4.setText(_translate("Form", "时间"))
-        self.label_2.setText(_translate("Form", "摄像头"))
-        self.label_3.setText(_translate("Form", "人脸库"))
-        self.pushButton_search.setText(_translate("Form", "搜索"))
-        self.pushButton_search.setProperty("class", _translate("Form", "default"))
-        self.pushButton_update.setText(_translate("Form", "获取最新"))
-        self.pushButton_update.setProperty("class", _translate("Form", "primary"))
+        Form_notify.setWindowTitle(_translate("Form_notify", "Form"))
+        self.label.setText(_translate("Form_notify", "name"))
+        self.label_4.setText(_translate("Form_notify", "time"))
+        self.label_2.setText(_translate("Form_notify", "camera"))
+        self.label_3.setText(_translate("Form_notify", "face_library"))
+        self.pushButton_search.setText(_translate("Form_notify", "search"))
+        self.pushButton_search.setProperty("class", _translate("Form_notify", "default"))
+        self.pushButton_update.setText(_translate("Form_notify", "get_latest"))
+        self.pushButton_update.setProperty("class", _translate("Form_notify", "primary"))

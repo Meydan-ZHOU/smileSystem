@@ -1,7 +1,7 @@
 import socket
 
-from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QCheckBox,QLabel,QToolButton
-from ui.FaceTaskUI import Ui_Form
+from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QCheckBox,QLabel,QToolButton,qApp
+from ui.FaceTaskUI import Ui_Form_new_task
 from PyQt5.QtCore import QSize,Qt
 
 from view.components.Video import Video
@@ -11,10 +11,11 @@ from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
-class FaceTaskPage(Ui_Form,QWidget):
+class FaceTaskPage(Ui_Form_new_task,QWidget):
     def __init__(self, HomeLayout, parent=None):
         super(FaceTaskPage, self).__init__(parent)
         self.setupUi(self)
+        self._tr = qApp.translate
         self.HomeLayout = HomeLayout
         print("新建人脸任务------------------------------------------------")
         self.dbHelper = DBHelper()
@@ -83,7 +84,7 @@ class FaceTaskPage(Ui_Form,QWidget):
             label.setText(name)
             h.setAlignment(Qt.AlignLeft|Qt.AlignHCenter)
             btn = QToolButton()
-            btn.setText("播放")
+            btn.setText(self._tr('Form','play'))
             btn.setProperty("data",(url,name))
             btn.clicked.connect(self.handleCameraClicked)
             btn_set_pointer_cursor(btn)
@@ -208,13 +209,14 @@ class FaceTaskPage(Ui_Form,QWidget):
             }
             camera_arr.append(item)
 
-        if(len(camera_arr)==0):
-            msg_box(self,"摄像头不能为空")
+        if (len(libs_arr) == 0):
+            msg_box(self, self._tr('Form','library_empty'))
             return
 
-        if(len(libs_arr)==0):
-            msg_box(self,"人脸库不能为空")
-            return 
+        if(len(camera_arr)==0):
+            msg_box(self,self._tr('Form','camera_empty'))
+            return
+
 
         params = {
             "task":{
@@ -230,7 +232,6 @@ class FaceTaskPage(Ui_Form,QWidget):
         if res:
             data = res.json()
             if(res.status_code==200 and data.get('code')==0):
-                msg_box(self,"操作成功")
                 self.HomeLayout.goFaceMain()
             else:
                 msg_box(self,data.get("msg"))

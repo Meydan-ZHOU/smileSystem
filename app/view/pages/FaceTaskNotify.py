@@ -1,6 +1,6 @@
 import time, threading,json
 from PyQt5.QtWidgets import QWidget,QApplication,qApp
-from ui.TaskNotifyUI import Ui_Form
+from ui.TaskNotifyUI import Ui_Form_notify
 from PyQt5.QtCore import pyqtSignal,QDate
 
 from view.components.ScrollWrapper import ScrollWrapper
@@ -8,11 +8,12 @@ from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
 
-class FaceTaskNotifyPage(Ui_Form,QWidget):
+class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
     update_notify_list_ui = pyqtSignal(list)
     def __init__(self, HomeLayout, parent=None):
         super(FaceTaskNotifyPage, self).__init__(parent)
         self.setupUi(self)
+        self._tr = qApp.translate
         self.HomeLayout = HomeLayout
         print("任务通知页面----------------------------------")
         self.dataFlag = True
@@ -25,18 +26,22 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
 
     def getDatas(self):
         self.initData()
+        self.setPageSize()
         self.getLibraryList()
         self.getCameraList()
         self.getAllNewest()
 
     def resizeEvent(self, event):
+        self.setPageSize()
+        self.queryData()
+
+    def setPageSize(self):
         width = self.size().width()
-        if(width>1200):
+        print(width)
+        if (width > 1450):
             self.pageSize = 16
         else:
             self.pageSize = 10
-
-        self.queryData()
 
     def initData(self):
         self.name = ''
@@ -45,11 +50,13 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.pageSize = 10
         self.currentPage = 1
         self.cameraList = []
-        self.currentCamera = '全部'
+        self.currentCamera = self._tr('Form','all')
         self.camera_name = ''
         self.libraryList = []
         self.library_name = ''
-        self.currentLibrary = '全部'
+        self.currentLibrary = self._tr('Form','all')
+        self.comboBox_camera.clear()
+        self.comboBox_library.clear()
 
     def initUI(self):
         self.setObjectName('faceNotify')
@@ -79,8 +86,8 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.comboBox_camera.clearEditText()
         comboBox = self.comboBox_camera
         cameras = self.cameraList
-        comboBox.addItem('全部')
-        comboBox.setItemData(0, '全部')
+        comboBox.addItem(self._tr('Form','all'))
+        comboBox.setItemData(0, self._tr('Form','all'))
         for index, camera in enumerate(cameras):
             name, ip,sn,username,password,url = camera
             comboBox.addItem(name)
@@ -104,8 +111,8 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
         self.comboBox_library.clearEditText()
         comboBox = self.comboBox_library
         library = self.libraryList
-        comboBox.addItem('全部')
-        comboBox.setItemData(0,'全部')
+        comboBox.addItem(self._tr('Form','all'))
+        comboBox.setItemData(0,self._tr('Form','all'))
         for index, lib in enumerate(library):
             lib_name, lib_id = lib
             comboBox.addItem(lib_name)
@@ -135,12 +142,12 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
 
     def queryData(self):
         self.name = self.lineEdit_name.text()
-        if (self.currentCamera == '全部'):
+        if (self.currentCamera == self._tr('Form','all')):
             self.camera_name = ''
         else:
             self.camera_name = self.currentCamera
 
-        if (self.currentLibrary == '全部'):
+        if (self.currentLibrary == self._tr('Form','all')):
             self.library_name = ''
         else:
             self.library_name = self.currentLibrary
@@ -210,15 +217,15 @@ class FaceTaskNotifyPage(Ui_Form,QWidget):
                     'notify':(time_str,similarity_str,face_image,register_image,camera_name,face_lib_name,capture_image,face_name,camera_url)
                 },
                 "info": [
-                    ('相似度：', similarity_str),
-                    ('姓名：', name),
-                    ('人脸库：', face_lib_name),
-                    ('摄像头：', camera_name),
-                    ('时间：', time_str),
+                    (self._tr('Form','similarity'), similarity_str),
+                    (self._tr('Form','name'), name),
+                    (self._tr('Form','library'), face_lib_name),
+                    (self._tr('Form','camera'), camera_name),
+                    (self._tr('Form','date'), time_str),
                 ]
             }
             dataList.append(options)
-        scrollArea = ScrollWrapper(dataList,5)
+        scrollArea = ScrollWrapper(dataList,self.pageSize/2)
         scrollArea.detail_data.connect(self.handleNotifyDetail)
         self.isLoading = False
         self.horizontalLayout.addWidget(scrollArea)

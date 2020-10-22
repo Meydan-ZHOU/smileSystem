@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton
+from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton,qApp
 from PyQt5.QtCore import QSize
-from ui.FaceLibrary import Ui_Form
+from ui.FaceLibrary import Ui_Form_library
 
 from view.pages.dialog.AddLibraryDialog import AddLibraryDialog
 from view.pages.dialog.NewFaceDialog import NewFaceDialog
@@ -13,10 +13,11 @@ from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
 
-class FaceLibraryPage(Ui_Form,QWidget):
+class FaceLibraryPage(Ui_Form_library,QWidget):
     def __init__(self, HomeLayout, parent=None):
         super(FaceLibraryPage, self).__init__(parent)
         self.setupUi(self)
+        self._tr = qApp.translate
         self.HomeLayout = HomeLayout
         print("人脸库管理页面----------------------------------")
         self.libraryList = None
@@ -31,18 +32,19 @@ class FaceLibraryPage(Ui_Form,QWidget):
 
     def getDatas(self):
         self.totalCount = 0
-        self.pageSize = 14
         self.currentPage = 1
         self.getLibraryList()
 
     def resizeEvent(self, event):
+        self.setPageSize()
+        self.getAllFacesList()
+
+    def setPageSize(self):
         width = self.size().width()
         if (width > 1200):
             self.pageSize = 16
         else:
             self.pageSize = 14
-
-        self.getAllFacesList()
 
     def initUI(self):
         self.setObjectName("faceLibrary")
@@ -104,16 +106,16 @@ class FaceLibraryPage(Ui_Form,QWidget):
                     }
                     db_back = self.dbHelper.insert_library(db_data)
                     if(db_back):
-                        msg_box(self, "操作成功")
+                        pass
                     else:
-                        msg_box(self, "操作失败")
+                        msg_box(self,self._tr("Form", "operate_error"))
 
                     self.getLibraryList()
                 else:
                     msg_box(self,result.get('msg'))
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr("Form", "server_connect_error"))
 
     def submitAddFace(self, data):
         lib_name, lib_id = data['library']
@@ -136,7 +138,6 @@ class FaceLibraryPage(Ui_Form,QWidget):
                 result = res.json()
                 if(res.status_code==200 and result.get('code')==0):
                     data['face_id'] = result.get('data').get('face_id')
-                    msg_box(self, "操作成功")
                     db_back = self.dbHelper.insert_library_face(data)
                     if(db_back):
                         self.getAllFacesList()
@@ -144,7 +145,7 @@ class FaceLibraryPage(Ui_Form,QWidget):
                     msg_box(self, result.get('msg'))
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr("Form", "server_connect_error"))
 
     def handleRefreshFace(self):
         self.getAllFacesList()
@@ -170,13 +171,13 @@ class FaceLibraryPage(Ui_Form,QWidget):
                     "name":name,
                 },
                 "info":[
-                    ('姓名：',name),
-                    ('电话：',tel),
+                    (self._tr("Form", "name"),name),
+                    (self._tr("Form", "telephone"),tel),
                 ]
             }
             dataList.append(options)
         print("self.horizontalLayout.count()",self.horizontalLayout.count())
-        scrollArea = ScrollWrapper(dataList)
+        scrollArea = ScrollWrapper(dataList,self.pageSize/2)
         scrollArea.delete_data.connect(self.submitDeleteFace)
         self.horizontalLayout.addWidget(scrollArea)
 
@@ -201,15 +202,14 @@ class FaceLibraryPage(Ui_Form,QWidget):
                 if(res.status_code==200 and result.get('code')==0):
                     db_back = self.dbHelper.delete_face(face_id,name,lib_name)
                     if(db_back):
-                        msg_box(self,"操作成功")
                         self.getAllFacesList()
                     else:
-                        msg_box(self,"操作失败")
+                        msg_box(self,self._tr("Form", "operate_error"))
                 else:
                     msg_box(self,result.get("msg"))
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr("Form", "server_connect_error"))
 
     def addFaceLibraryBoxShow(self):
         self.dialog = AddLibraryDialog()
@@ -218,7 +218,7 @@ class FaceLibraryPage(Ui_Form,QWidget):
 
     def newFaceBoxShow(self):
         if(len(self.libraryList)==0):
-            msg_box(self,"请先创建人脸库")
+            msg_box(self,self._tr("Form", "please_first_create_face_library"))
             return
         self.newFaceDialog = NewFaceDialog(self.libraryList)
         self.newFaceDialog.submit_add_face.connect(lambda data: self.submitAddFace(data))
@@ -237,8 +237,8 @@ class FaceLibraryPage(Ui_Form,QWidget):
             # 摄像头名字
             camera_text = QLabel(name)
             btn = QPushButton()
-            btn.setText("删除")
-            btn.setFixedSize(50,25)
+            btn.setText('x')
+            btn.setFixedSize(35,35)
             btn.setProperty("data",(id,name))
             btn.clicked.connect(self.handleDeleteLibrary)
             btn_set_pointer_cursor(btn)
@@ -262,15 +262,14 @@ class FaceLibraryPage(Ui_Form,QWidget):
                 if(res.status_code==200 and result.get("code")==0):
                     db_back = self.dbHelper.delete_library(id,name)
                     if(db_back):
-                        msg_box(self, "操作成功")
                         self.getLibraryList()
                     else:
-                        msg_box(self, "操作失败")
+                        msg_box(self,self._tr("Form", "operate_error"))
                 else:
                     msg_box(self,result.get("msg"))
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr("Form", "server_connect_error"))
 
     def getLibraryList(self):
         db_back = self.dbHelper.select_all_library()

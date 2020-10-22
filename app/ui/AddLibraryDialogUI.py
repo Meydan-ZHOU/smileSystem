@@ -41,5 +41,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "添加人脸库"))
-        self.label.setText(_translate("Dialog", "人脸库名"))
+        Dialog.setWindowTitle(_translate("Dialog", "new_face_library"))
+        self.label.setText(_translate("Dialog", "face_library_name"))

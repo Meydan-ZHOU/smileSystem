@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton
+from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton,qApp
 from PyQt5.QtCore import QSize
-from ui.LiveUI import Ui_Form
+from ui.LiveUI import Ui_Form_live
 from view.pages.dialog.AddCameraDialog import AddCameraDialog
 from view.components.Video import Video
 
@@ -9,10 +9,11 @@ from utils.common import msg_box,btn_set_pointer_cursor
 from sql.DBHelper import DBHelper
 
 
-class LivePage(Ui_Form,QWidget):
+class LivePage(Ui_Form_live,QWidget):
     def __init__(self, parent=None):
         super(LivePage, self).__init__(parent)
         self.setupUi(self)
+        self._tr = qApp.translate
         self.initUI()
         self.dbHelper = DBHelper()
         self.createTable()
@@ -47,7 +48,7 @@ class LivePage(Ui_Form,QWidget):
 
             #删除按钮
             btn = QPushButton()
-            btn.setText("编辑")
+            btn.setText(self._tr('Form','edit'))
             btn.setFixedSize(50, 25)
             btn.setProperty("data",camera)
             btn.setProperty('class','default')
@@ -71,17 +72,17 @@ class LivePage(Ui_Form,QWidget):
     def updateCamera(self,data):
         db_back = self.dbHelper.update_camera(data)
         if (db_back):
-            msg_box(self, "操作成功")
+            pass
         else:
-            msg_box(self, "操作失败")
+            msg_box(self, self._tr('Form', 'video_open_error'))
         self.getAllCameraList()
 
     def handleDeleteCamera(self,ip):
         db_back = self.dbHelper.delete_camera(ip)
         if(db_back):
-            msg_box(self,"操作成功")
+            pass
         else:
-            msg_box(self,"操作失败")
+            msg_box(self, self._tr('Form', 'video_open_error'))
         self.getAllCameraList()
 
     def addCameraDialogShow(self):
@@ -97,9 +98,9 @@ class LivePage(Ui_Form,QWidget):
     def submitAddCamera(self,camera):
         db_back = self.dbHelper.insert_camera(camera)
         if(db_back):
-            msg_box(self, "操作成功")
+           pass
         else:
-            msg_box(self, "操作失败")
+            msg_box(self,self._tr('Form','video_open_error'))
         self.getAllCameraList()
 
     def initVideo(self):

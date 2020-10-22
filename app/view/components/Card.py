@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget,QLabel
+from PyQt5.QtWidgets import QWidget,QLabel,QStackedWidget
 from ui.CardUI import Ui_Form
 from PyQt5.QtCore import Qt,pyqtSignal
 from utils.common import displayOriginImage
@@ -50,7 +50,7 @@ class Card(Ui_Form,QWidget):
 
         for index,(name,value) in enumerate(self.info):
             label1 = QLabel(str(name))
-            label2 = QLabel(str(value))
+            label2 = QLabel(' : '+str(value))
             label1.setAlignment(Qt.AlignTop)
             label2.setWordWrap(True)
             self.formLayout.insertRow(index,label1,label2)

@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QWidget,qApp
 from PyQt5.QtCore import Qt
-from ui.HeaderUI import Ui_Form
+from ui.HeaderUI import Ui_Form_header
 from view.components.dialog.AppInfoDialog import AppInfoDialog
 
 from utils.common import displayOriginImage
 
-class Header(Ui_Form,QWidget):
+class Header(Ui_Form_header,QWidget):
     def __init__(self, HomeWindow):
         super(Header, self).__init__()
         self.setupUi(self)
@@ -59,11 +59,11 @@ class Header(Ui_Form,QWidget):
             HomeWindow.move(dest_x,dest_y)
 
     def initUI(self):
-        displayOriginImage(self.label, "static/images/logoEN.png",None,60)
+        displayOriginImage(self.label, "static/images/logoEN.png",None,50)
         self.initIcon()
         self.myQSS()
+        self.label_system_title.hide()
         if self.HomeWindow.objectName()=='Form_login':
-            self.widget_logo.hide()
             self.pushButton_max.hide()
             self.pushButton_min.hide()
             self.widget_nav.hide()
@@ -78,10 +78,6 @@ class Header(Ui_Form,QWidget):
             }
             #widget_operates QPushButton{
                 font-family:"Webdings";
-                font-size:12px;
-                width:20px;
-                height:20px;
-                line-height:20px;
                 background-color:transparent;
                 color:#fff;
                 cursor:pointer;

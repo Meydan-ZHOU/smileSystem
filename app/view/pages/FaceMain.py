@@ -14,6 +14,7 @@ class FaceMainPage(Ui_Form,QWidget):
         super(FaceMainPage, self).__init__(parent)
         self.setupUi(self)
         self.HomeLayout = HomeLayout
+        self._tr = qApp.translate
         print("人脸主页面----------------------------------")
         self.dbHelper = DBHelper()
         self.dataFlag = True
@@ -84,7 +85,7 @@ class FaceMainPage(Ui_Form,QWidget):
                         self.taskInfoList.append(data)
             except ConnectionError as e:
                 print(e)
-                msg_box(self,"服务器连接异常")
+                msg_box(self,self._tr('Form','server_connect_error'))
 
         self.formatData(self.taskInfoList)
 
@@ -148,7 +149,7 @@ class FaceMainPage(Ui_Form,QWidget):
         tableWidget = self.tableWidget
         tableWidget.clear()
         tableWidget.setColumnCount(8)
-        tableWidget.setHorizontalHeaderLabels(["序号","摄像头地址", "状态","运行时间", "人脸库", "相似度","报警地址","操作"])
+        tableWidget.setHorizontalHeaderLabels([self._tr('Form','index'),self._tr('Form','camera_url'), self._tr('Form','status'),self._tr('Form','runtime'), self._tr('Form','face_library'),self._tr('Form','similarity'),self._tr('Form','monitor_address'),self._tr('Form','operate')])
         font = tableWidget.horizontalHeader().font()
         font.setBold(True)
         tableWidget.horizontalHeader().setFont(font)
@@ -202,13 +203,13 @@ class FaceMainPage(Ui_Form,QWidget):
             widget = QWidget()
             h = QHBoxLayout()
             btn_del = QPushButton()
-            btn_del.setText("删除")
+            btn_del.setText(self._tr('Form','delete'))
             btn_del.setProperty('class','danger')
             btn_del.setProperty("task_id",task_id)
             btn_del.clicked.connect(self.handleDeleteTask)
             btn_set_pointer_cursor(btn_del)
             btn_show = QPushButton()
-            btn_show.setText("查看")
+            btn_show.setText(self._tr('Form','look'))
             btn_show.setProperty('class', 'default')
             btn_show.setProperty("task_id", task_id)
             btn_show.clicked.connect(self.goTaskDetectPage)
@@ -240,7 +241,7 @@ class FaceMainPage(Ui_Form,QWidget):
             label = QLabel()
             item = lists[index]
             label.setText(str(item))
-            if(item == '异常'):
+            if(item == self._tr('Form','abnormal')):
                 label.setProperty('class','error')
             v.addWidget(label)
         widget.setLayout(v)
@@ -252,9 +253,9 @@ class FaceMainPage(Ui_Form,QWidget):
 
     def getStatusText(self,num):
         if(num==0):
-            return "异常"
+            return self._tr('Form','abnormal')
         else:
-            return "运行中"
+            return self._tr('Form','running')
 
     def handleDeleteTask(self):
         task_id = self.sender().property("task_id")
@@ -268,15 +269,14 @@ class FaceMainPage(Ui_Form,QWidget):
                 if(res.status_code==200 and data.get("code")==0):
                     db_back = self.dbHelper.delete_notify(task_id)
                     if(db_back):
-                        msg_box(self, "操作成功")
                         self.getTasksList()
                     else:
-                        msg_box(self,"操作失败")
+                        msg_box(self,self._tr('Form','operate_error'))
                 else:
                     msg_box(self,data.get("msg"))
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self,self._tr('Form','server_connect_error'))
 
     def getTasksList(self):
         try:
@@ -289,4 +289,4 @@ class FaceMainPage(Ui_Form,QWidget):
                     self.getTaskInfoList()
         except ConnectionError as e:
             print(e)
-            msg_box(self,"服务器连接异常")
+            msg_box(self, self._tr('Form', 'server_connect_error'))
