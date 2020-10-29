@@ -28,6 +28,7 @@ class Pagination(QWidget):
         skipLable_0 = QLabel(self._tr("Form", "jump"))
         self.skipPage = QLineEdit()
         self.skipPage.setMaximumWidth(40)
+        self.skipPage.setMaximumHeight(22)
         skipLabel_1 = QLabel(self._tr("Form", "page"))
         confirmSkip = QPushButton(self._tr("Form", "sure"))
 
@@ -56,6 +57,7 @@ class Pagination(QWidget):
         h.addWidget(skipLabel_1)
         h.addWidget(confirmSkip)
 
+        self.myQSS()
 
     def _home_page(self):
         self.control_signal('home')
@@ -104,3 +106,12 @@ class Pagination(QWidget):
 
         self.curPageLabel.setText(str(self.current_page))
         self.current_page_change.emit(self.current_page)
+
+    def myQSS(self):
+        qssStyle = '''
+                    QPushButton{
+                        background-color:#191d2d;
+                        border-radius:0px;
+                    }
+                '''
+        self.setStyleSheet(qssStyle)

@@ -90,12 +90,13 @@ class FaceMainPage(Ui_Form,QWidget):
         self.formatData(self.taskInfoList)
 
     def formatData(self,tasks):
+        print(tasks)
         task_all_dic = {}
         for i, task in enumerate(tasks):
             status = task["status"]
             cameras = task["task"]["cameras"]
             libraries = task["task"]["libraries"]
-            server = task["notify"]["server"]
+            camera_name = task["notify"]["server"]
             time = int(task["runtime"]/1000000)
             task_id = task['task_id']
             library_dict = {}
@@ -116,11 +117,11 @@ class FaceMainPage(Ui_Form,QWidget):
                     print("该人脸库不存在", lib_id)
 
             # 获取摄像头字典
-
             for cams in cameras:
                 url = cams['url']
                 lib_ids = cams['face_lib_ids']
                 lib_names = []
+
                 for lib_id in lib_ids:
                     if not library_dict.get(lib_id)==None:
                         lib_name = library_dict[lib_id]['name']
@@ -130,17 +131,25 @@ class FaceMainPage(Ui_Form,QWidget):
                         "lib_names": lib_names,
                     }
 
+
                 for stus in status:
                     camera = stus['camera']
                     running = stus['running']
                     if (camera == url):
                         cameras_dict[url]["running"] = running
+                        # 获取摄像头名字
+                        db_back = self.dbHelper.select_camera_by_url(url)
+                        if len(db_back) > 0:
+                            camera = db_back[0]
+                            cameras_dict[url]["camera_name"] = camera[0]
+                        else:
+                            cameras_dict[url]["camera_name"] = ''
+
 
             if task_all_dic.get(task_id) == None:
                 task_all_dic[task_id] = {
                     "library_dict": library_dict,
                     "cameras_dict": cameras_dict,
-                    "server":server,
                     "time":time,
                 }
         self.update_table_list_ui.emit(task_all_dic)
@@ -149,7 +158,7 @@ class FaceMainPage(Ui_Form,QWidget):
         tableWidget = self.tableWidget
         tableWidget.clear()
         tableWidget.setColumnCount(8)
-        tableWidget.setHorizontalHeaderLabels([self._tr('Form','index'),self._tr('Form','camera_url'), self._tr('Form','status'),self._tr('Form','runtime'), self._tr('Form','face_library'),self._tr('Form','similarity'),self._tr('Form','monitor_address'),self._tr('Form','operate')])
+        tableWidget.setHorizontalHeaderLabels([self._tr('Form','index'),self._tr('Form','camera_name'),self._tr('Form','camera_url'), self._tr('Form','status'),self._tr('Form','runtime'), self._tr('Form','face_library'),self._tr('Form','similarity'),self._tr('Form','operate')])
         font = tableWidget.horizontalHeader().font()
         font.setBold(True)
         tableWidget.horizontalHeader().setFont(font)
@@ -165,13 +174,13 @@ class FaceMainPage(Ui_Form,QWidget):
         tableWidget.setRowCount(len(tasks_dict))
         for i,task_id in enumerate(tasks_dict):
             task = tasks_dict[task_id]
-            server = task['server']
             time = task['time']
             library_dict = task['library_dict']
             cameras_dict = task['cameras_dict']
-            cameras_list = {}
+            camera_url_list = {}
             libs_list = {}
             running_list = {}
+            camera_name_list = {}
             similarity_list = {}
             for index,lib_id in enumerate(library_dict):
                 lib = library_dict[lib_id]
@@ -182,24 +191,26 @@ class FaceMainPage(Ui_Form,QWidget):
                 camera = cameras_dict[url]
                 running = self.getStatusText(camera['running'])
                 lib_names = camera['lib_names']
+                camera_name = camera['camera_name']
+                camera_name_list[index] = camera_name
                 running_list[index] = running
                 libs_list[index] = lib_names
-                cameras_list[index] = url
+                camera_url_list[index] = url
 
             widget = QTableWidgetItem(str(i+1))
             tableWidget.setItem(i, 0, widget)
             widget = QTableWidgetItem(str(time)+'S')
-            tableWidget.setItem(i, 3, widget)
-            widget = self.getItemWidget(cameras_list)
+            tableWidget.setItem(i, 4, widget)
+            widget = self.getItemWidget(camera_name_list)
             tableWidget.setCellWidget(i, 1, widget)
-            widget = self.getItemWidget(libs_list)
-            tableWidget.setCellWidget(i, 4, widget)
-            widget = self.getItemWidget(similarity_list)
-            tableWidget.setCellWidget(i, 5, widget)
-            widget = self.getItemWidget(running_list)
+            widget = self.getItemWidget(camera_url_list)
             tableWidget.setCellWidget(i, 2, widget)
-            widget = QTableWidgetItem(server)
-            tableWidget.setItem(i, 6, widget)
+            widget = self.getItemWidget(libs_list)
+            tableWidget.setCellWidget(i, 5, widget)
+            widget = self.getItemWidget(similarity_list)
+            tableWidget.setCellWidget(i, 6, widget)
+            widget = self.getItemWidget(running_list)
+            tableWidget.setCellWidget(i, 3, widget)
             widget = QWidget()
             h = QHBoxLayout()
             btn_del = QPushButton()
@@ -222,7 +233,7 @@ class FaceMainPage(Ui_Form,QWidget):
             self.resizeTable(tableWidget)
 
     def resizeTable(self,tableWidget):
-        # tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         tableWidget.resizeRowsToContents()
         tableWidget.resizeColumnsToContents()
         tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)

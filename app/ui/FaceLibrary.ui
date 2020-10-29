@@ -49,9 +49,15 @@
       </property>
       <item row="0" column="0">
        <widget class="QWidget" name="widget_left" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>275</width>
           <height>16777215</height>
          </size>
         </property>
@@ -81,30 +87,33 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>30</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>16777215</height>
               </size>
+             </property>
+             <property name="class" stdset="0">
+              <string>list_title</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <property name="spacing">
                <number>0</number>
               </property>
               <property name="leftMargin">
-               <number>0</number>
+               <number>10</number>
               </property>
               <property name="topMargin">
-               <number>0</number>
+               <number>10</number>
               </property>
               <property name="rightMargin">
-               <number>0</number>
+               <number>10</number>
               </property>
               <property name="bottomMargin">
-               <number>0</number>
+               <number>10</number>
               </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -127,7 +136,7 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>+</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -147,18 +156,21 @@
       <item row="0" column="1">
        <widget class="QWidget" name="widget_right" native="true">
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QWidget" name="widget_1" native="true">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>54</height>
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,3">
@@ -169,13 +181,13 @@
              <number>0</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="rightMargin">
              <number>0</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>5</number>
             </property>
             <item>
              <widget class="QWidget" name="widget_3" native="true">
@@ -243,7 +255,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_">
+                <widget class="QPushButton" name="pushButton_update_face">
                  <property name="maximumSize">
                   <size>
                    <width>16777215</width>
@@ -312,7 +324,7 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>40</height>
+             <height>50</height>
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -380,7 +392,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_</sender>
+   <sender>pushButton_update_face</sender>
    <signal>clicked()</signal>
    <receiver>Form_library</receiver>
    <slot>handleRefreshFace()</slot>

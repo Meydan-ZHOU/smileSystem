@@ -3,6 +3,8 @@ from ui.CardUI import Ui_Form
 from PyQt5.QtCore import Qt,pyqtSignal
 from utils.common import displayOriginImage
 
+import qtawesome
+
 class Card(Ui_Form,QWidget):
     delete_card_data = pyqtSignal(dict)
     detail_card_data = pyqtSignal(dict)
@@ -35,6 +37,7 @@ class Card(Ui_Form,QWidget):
 
     def initUI(self):
         width = self.width()
+        self.toolButton_delete.setIcon(qtawesome.icon('fa.close',color='#e33e33'))
         if(self.operates==False):
             self.widget_operates.hide()
 
@@ -50,7 +53,7 @@ class Card(Ui_Form,QWidget):
 
         for index,(name,value) in enumerate(self.info):
             label1 = QLabel(str(name))
-            label2 = QLabel(' : '+str(value))
+            label2 = QLabel(' :  '+str(value))
             label1.setAlignment(Qt.AlignTop)
             label2.setWordWrap(True)
             self.formLayout.insertRow(index,label1,label2)

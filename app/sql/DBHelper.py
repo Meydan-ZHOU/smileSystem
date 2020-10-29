@@ -234,20 +234,21 @@ class DBHelper(object):
             """
             values = [(notify_time,task_id,camera_url,face_id,face_lib_id,similarity,extras,face_path,register_image,face_lib_name,camera_name,face_name,capture_path)]
             print(self.db.insert_table_many(sql, values))
-        except Exception:
-            print("报警信息插入失败插入")
+        except Exception as e:
+            print("报警信息插入失败插入",e)
 
-    def query_notify_table_count(self,params):
+    def query_notify_table_count(self,task_id,params):
         name = params['name']
         camera = params['camera']
         library = params['library']
         time = params['time']
         sql = """
             SELECT count(*) from notify where face_name like '%{name}%'  
+            AND task_id like '%{task_id}%' 
             AND camera_name like '%{camera}%' 
             AND notify_time >= {time} 
             AND face_lib_name like '%{library}%' 
-        """.format(name=name,camera=camera,time=time,library=library)
+        """.format(name=name,camera=camera,task_id=task_id,time=time,library=library)
         return self.db.count_table(sql)
 
     def query_face_table_count(self):

@@ -114,6 +114,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="label_47">
+       <property name="text">
+        <string>camera_name</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="0" column="2">

@@ -1,9 +1,10 @@
-from PyQt5.QtWidgets import QMessageBox,QGridLayout
+from PyQt5.QtWidgets import QMessageBox,qApp
 from PyQt5.QtGui import QPixmap,QCursor
 from PyQt5.QtCore import Qt
 import os,sys
-
 dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
+
+_tr = qApp.translate
 
 class CommonHelper:
     @staticmethod
@@ -16,7 +17,7 @@ def btn_set_pointer_cursor(btn):
 
 
 def msg_box(widget,str):
-    QMessageBox.warning(widget, "提示",str, QMessageBox.Yes | QMessageBox.No)
+    QMessageBox.information(widget, _tr('Form','tips') ,str)
 
 def displayOriginImage(label,imagePath,width=None,height=None):
     jpg1 = QPixmap(imagePath)
@@ -49,5 +50,4 @@ def displayOriginImage(label,imagePath,width=None,height=None):
     label.setScaledContents(True)
 
 
-SYS_STYLE_LOGIN = CommonHelper.readQSS("./static/style/login.qss")
 SYS_STYLE_COMMON = CommonHelper.readQSS("./static/style/common.qss")

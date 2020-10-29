@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import QDialog,qApp
+from PyQt5.QtCore import Qt
 from ui.AppInfoDialog import Ui_Dialog
 from api.index import getAppInfo
 
-from PyQt5.QtCore import QTranslator,QSettings,QCoreApplication
+from PyQt5.QtCore import QSettings,QCoreApplication
 
 from config.config import config_write,config_read
 from utils.common import msg_box
@@ -11,12 +12,14 @@ class AppInfoDialog(Ui_Dialog, QDialog):
     def __init__(self):
         super(AppInfoDialog, self).__init__()
         self.setupUi(self)
+        self.setFixedSize(550,450)
         self._tr = qApp.translate
         self.initSlot()
         self.initUI()
         self.host = None
         self.getServerHost()
         self.getAppInformation()
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
 
     def initUI(self):
@@ -28,21 +31,14 @@ class AppInfoDialog(Ui_Dialog, QDialog):
             self.radioButton_cn.setChecked(True)
 
     def initSlot(self):
-        self.buttonBox.accepted.disconnect(self.accept)
-        self.buttonBox.accepted.connect(self.handleSubmit)
+        pass
 
     def languageToggle(self,flag):
-        tr = QTranslator()
-        qApp.removeTranslator(tr)
         regSettings = QSettings(QCoreApplication.organizationName(), QCoreApplication.applicationName())
         if(True==flag):
-            tr.load('appLang_CN.qm')
             regSettings.setValue('Language','CN')
         else:
             regSettings.setValue('Language', 'EN')
-            tr.load('appLang_EN.qm')
-
-        qApp.installTranslator(tr)
 
 
 
@@ -56,6 +52,9 @@ class AppInfoDialog(Ui_Dialog, QDialog):
             config_write(host)
             msg_box(self, self._tr('Form','reboot_client'))
             qApp.closeAllWindows()
+
+    def handleCancel(self):
+        self.reject()
 
     def getServerHost(self):
         self.host = config_read()

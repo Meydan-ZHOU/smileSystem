@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget,QStackedWidget,QApplication,QDesktopWidget
+from PyQt5.QtWidgets import QWidget,QStackedWidget,QApplication,QDesktopWidget,qApp
 from PyQt5.QtCore import Qt
 from ui.HomeLayoutUI import Ui_Form_home
 from utils.common import SYS_STYLE_COMMON
@@ -20,6 +20,9 @@ class HomeWindow(Ui_Form_home,QWidget):
         self.initStackedWidget()
         self.initSlot()
 
+    def resizeEvent(self,event):
+        self.setAppSize()
+
     def initSize(self,rate):
         desktop = QApplication.desktop().screenGeometry()
         self.winWidth = desktop.width() * rate
@@ -28,12 +31,19 @@ class HomeWindow(Ui_Form_home,QWidget):
               (self.winWidth, self.winHeight))
         self.resize(self.winWidth, self.winHeight)
 
-        screen = QDesktopWidget().screenGeometry()
-        self.move((screen.width() - self.winWidth + 100)/2,
-                  (screen.height() - self.winHeight -30)/2)
+        fg = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        fg.moveCenter(cp)
+        self.move(fg.topLeft())
+
 
     def initUI(self):
         self.setStyleSheet(SYS_STYLE_COMMON)
+        self.setAppSize()
+
+    def setAppSize(self):
+        qApp.width = self.width()
+        qApp.height = self.height()
 
     def initHeader(self):
         self.header = Header(self)

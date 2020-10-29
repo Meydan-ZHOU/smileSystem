@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton,qApp
 from PyQt5.QtCore import QSize
 from ui.FaceLibrary import Ui_Form_library
+from PyQt5.QtGui import QIcon
 
 from view.pages.dialog.AddLibraryDialog import AddLibraryDialog
 from view.pages.dialog.NewFaceDialog import NewFaceDialog
@@ -12,6 +13,8 @@ from view.components.ScrollWrapper import ScrollWrapper
 from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
+
+import qtawesome
 
 class FaceLibraryPage(Ui_Form_library,QWidget):
     def __init__(self, HomeLayout, parent=None):
@@ -37,7 +40,7 @@ class FaceLibraryPage(Ui_Form_library,QWidget):
 
     def resizeEvent(self, event):
         self.setPageSize()
-        self.getAllFacesList()
+        self.getDatas()
 
     def setPageSize(self):
         width = self.size().width()
@@ -47,6 +50,9 @@ class FaceLibraryPage(Ui_Form_library,QWidget):
             self.pageSize = 14
 
     def initUI(self):
+        self.pushButton_update_face.setIcon(qtawesome.icon('fa.refresh',color='#a4a5a8'))
+        self.pushButton_new_face.setIcon(qtawesome.icon('fa.plus',color='#fff'))
+        self.pushButton.setIcon(qtawesome.icon('fa.plus',color='#a4a5a8'))
         self.setObjectName("faceLibrary")
         self.pushButton.setProperty('class', 'addButton')
 
@@ -234,16 +240,22 @@ class FaceLibraryPage(Ui_Form_library,QWidget):
             widget = QWidget()
             # 总的横向布局
             layout_main = QHBoxLayout()
-            # 摄像头名字
-            camera_text = QLabel(name)
+            #图标
+            btnIcon = QPushButton()
+            btnIcon.setIcon(QIcon('static/images/users.png'))
+            btnIcon.setFixedSize(30, 30)
+            # 人脸库名字
+            library_text = QLabel(name)
             btn = QPushButton()
-            btn.setText('x')
-            btn.setFixedSize(35,35)
+            btn.setIcon(qtawesome.icon('fa.close',color='#e33e33'))
+            btn.setFixedSize(20,20)
             btn.setProperty("data",(id,name))
             btn.clicked.connect(self.handleDeleteLibrary)
             btn_set_pointer_cursor(btn)
-            # 摄像头编辑按钮
-            layout_main.addWidget(camera_text)
+
+
+            layout_main.addWidget(btnIcon)
+            layout_main.addWidget(library_text)
             layout_main.addWidget(btn)
             widget.setLayout(layout_main)
             self.listWidget.addItem(item)

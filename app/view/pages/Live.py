@@ -1,13 +1,18 @@
 from PyQt5.QtWidgets import QWidget,QListWidgetItem,QHBoxLayout,QLabel,QPushButton,qApp
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize,Qt
+from PyQt5.QtGui import QIcon
 from ui.LiveUI import Ui_Form_live
 from view.pages.dialog.AddCameraDialog import AddCameraDialog
 from view.components.Video import Video
+from view.components.MyDialog import MyDialog
 
 from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
+from utils.CameraOnvif import ws_discovery
+
+import qtawesome
 
 class LivePage(Ui_Form_live,QWidget):
     def __init__(self, parent=None):
@@ -15,6 +20,7 @@ class LivePage(Ui_Form_live,QWidget):
         self.setupUi(self)
         self._tr = qApp.translate
         self.initUI()
+        self.initSlot()
         self.dbHelper = DBHelper()
         self.createTable()
         print("我是 live")
@@ -29,7 +35,18 @@ class LivePage(Ui_Form_live,QWidget):
 
     def initUI(self):
         self.setObjectName("liveW")
+        self.pushButton_add_camera.setIcon(qtawesome.icon('fa.plus',color='#a4a5a8'))
+        self.pushButton_onvif.setIcon(qtawesome.icon('fa.search',color='#a4a5a8'))
         self.initVideo()
+
+    def initSlot(self):
+        self.pushButton_onvif.clicked.connect(self.discoveryCameraOnvif)
+
+    def discoveryCameraOnvif(self):
+        pass
+        #cameraList = ws_discovery()
+        #print(cameraList)
+
 
     def updateCameraListUI(self):
         self.listWidget.clear()
@@ -46,18 +63,21 @@ class LivePage(Ui_Form_live,QWidget):
             label_name = QLabel()
             label_name.setText(name)
 
+            btnIcon = QPushButton()
+            btnIcon.setIcon(QIcon('static/images/camera.png'))
+            btnIcon.setFixedSize(30,30)
             #删除按钮
             btn = QPushButton()
-            btn.setText(self._tr('Form','edit'))
-            btn.setFixedSize(50, 25)
+            btn.setIcon(qtawesome.icon('fa.cog',color='#a4a5a8'))
             btn.setProperty("data",camera)
             btn.setProperty('class','default')
+            btn.setFixedSize(30,30)
             btn.clicked.connect(self.handleEditCamera)
             btn_set_pointer_cursor(btn)
 
+            h.addWidget(btnIcon)
             h.addWidget(label_name)
             h.addWidget(btn)
-            h.setStretch(0,1)
             widget.setLayout(h)
             self.listWidget.addItem(item)
             self.listWidget.setItemWidget(item, widget)

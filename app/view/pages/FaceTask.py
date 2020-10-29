@@ -11,6 +11,8 @@ from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
+import qtawesome
+
 class FaceTaskPage(Ui_Form_new_task,QWidget):
     def __init__(self, HomeLayout, parent=None):
         super(FaceTaskPage, self).__init__(parent)
@@ -41,13 +43,15 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
         return ip
 
     def getAllCameraList(self):
+        self.cameraList = []
         db_back = self.dbHelper.select_all_camera()
         self.cameraList = db_back
         self.updateCameraListUI()
 
     def initData(self):
+        self.comboBox_face_libray.clear()
         self.cameraList = []
-        self.libraryList = None
+        self.libraryList = []
         self.currentLibrary = None
         self.libraryCamera = {}
 
@@ -84,7 +88,8 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
             label.setText(name)
             h.setAlignment(Qt.AlignLeft|Qt.AlignHCenter)
             btn = QToolButton()
-            btn.setText(self._tr('Form','play'))
+            btn.setIcon(qtawesome.icon('fa.play-circle',color='#a4a5a8'))
+            btn.setStyleSheet("background-color:transparent;")
             btn.setProperty("data",(url,name))
             btn.clicked.connect(self.handleCameraClicked)
             btn_set_pointer_cursor(btn)
@@ -110,8 +115,10 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
         print(self.libraryCamera)
 
     def getLibraryList(self):
+        self.libraryList = []
         self.currentLibrary = None
         db_back = self.dbHelper.select_all_library()
+        print("db_back",db_back)
         if (db_back):
             self.libraryList = db_back
             if len(self.libraryList) > 0:
@@ -122,6 +129,7 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
             self.libraryList = []
             self.currentLibrary = None
 
+        print("self.currentLibrary-----", self.currentLibrary)
         self.updateLibraryComboboxUI(self.libraryList)
         self.updateCameraListUI()
 
@@ -143,11 +151,10 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
         comboBox.currentIndexChanged.connect(self.faceLibraryChanged)
 
     def faceLibraryChanged(self,i):
-        if(i<0):
+        if(i<0 or self.comboBox_face_libray.itemData(i) == None):
             return
-        print("I", i)
         self.currentLibrary = self.comboBox_face_libray.itemData(i)
-        print("I", 'self.currentLibrary',self.currentLibrary)
+        print(i, 'self.currentLibrary',self.currentLibrary)
         self.updateCameraListUI()
         self.initOtherSettting()
 
@@ -209,14 +216,15 @@ class FaceTaskPage(Ui_Form_new_task,QWidget):
             }
             camera_arr.append(item)
 
-        if (len(libs_arr) == 0):
-            msg_box(self, self._tr('Form','library_empty'))
-            return
+
 
         if(len(camera_arr)==0):
             msg_box(self,self._tr('Form','camera_empty'))
             return
 
+        if (len(libs_arr) == 0):
+            msg_box(self, self._tr('Form', 'library_empty'))
+            return
 
         params = {
             "task":{

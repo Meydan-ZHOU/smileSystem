@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QWidget,qApp
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from ui.HeaderUI import Ui_Form_header
 from view.components.dialog.AppInfoDialog import AppInfoDialog
 
 from utils.common import displayOriginImage
+
+import qtawesome
 
 class Header(Ui_Form_header,QWidget):
     def __init__(self, HomeWindow):
@@ -14,7 +17,20 @@ class Header(Ui_Form_header,QWidget):
         self.setNavStatus(0)
         self.initUI()
         self.initSlot()
-        self.setMouseTracking(True)
+
+    def initUI(self):
+        displayOriginImage(self.label, "static/images/logoEN.png", None, 50)
+        self.initIcon()
+        self.myQSS()
+        self.label_system_title.hide()
+        self.pushButton_0.setIcon(QIcon("static/images/view.png"))
+        self.pushButton_1.setIcon(QIcon("static/images/faceRecognize.png"))
+        if self.HomeWindow.objectName() == 'Form_login':
+            self.pushButton_max.hide()
+            self.pushButton_min.hide()
+            self.widget_nav.hide()
+            self.pushButton_info.hide()
+
 
     def setNavStatus(self,index):
         children = self.widget_nav.children()
@@ -58,16 +74,6 @@ class Header(Ui_Form_header,QWidget):
             #移动窗体
             HomeWindow.move(dest_x,dest_y)
 
-    def initUI(self):
-        displayOriginImage(self.label, "static/images/logoEN.png",None,50)
-        self.initIcon()
-        self.myQSS()
-        self.label_system_title.hide()
-        if self.HomeWindow.objectName()=='Form_login':
-            self.pushButton_max.hide()
-            self.pushButton_min.hide()
-            self.widget_nav.hide()
-            self.pushButton_info.hide()
 
     def myQSS(self):
         qssStyle = '''
@@ -100,10 +106,10 @@ class Header(Ui_Form_header,QWidget):
         self.dialog.show()
 
     def initIcon(self):
-        self.pushButton_info.setText('i')
+        self.pushButton_info.setIcon(qtawesome.icon('fa.cog',color='white'))
         self.pushButton_close.setText('r')
         self.pushButton_max.setText('1')
-        self.pushButton_min.setText('0')
+        self.pushButton_min.setIcon(qtawesome.icon('fa.minus',color='white'))
 
     def windowMax(self):
         text = self.pushButton_max.text()

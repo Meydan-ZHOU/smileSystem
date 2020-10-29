@@ -7,6 +7,7 @@ from view.components.ScrollWrapper import ScrollWrapper
 from view.components.Pagination import Pagination
 
 from sql.DBHelper import DBHelper
+import qtawesome
 
 class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
     update_notify_list_ui = pyqtSignal(list)
@@ -33,7 +34,7 @@ class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
 
     def resizeEvent(self, event):
         self.setPageSize()
-        self.queryData()
+        self.getDatas()
 
     def setPageSize(self):
         width = self.size().width()
@@ -60,6 +61,8 @@ class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
 
     def initUI(self):
         self.setObjectName('faceNotify')
+        self.pushButton_update.setIcon(qtawesome.icon('fa.refresh', color='#fff'))
+        self.pushButton_search.setIcon(qtawesome.icon('fa.search',color='#a4a5a8'))
         self.dateTimeEdit.setDate(QDate.currentDate())
         self.dateTimeEdit.setMinimumDate(QDate.currentDate().addDays(-365))
         self.dateTimeEdit.setMaximumDate(QDate.currentDate().addDays(365))
@@ -124,8 +127,8 @@ class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
     def libraryChange(self, i):
         self.currentLibrary = self.comboBox_library.itemData(i)
 
-    def getNotifyTotalCount(self,params):
-        self.totalCount = self.dbHelper.query_notify_table_count(params)
+    def getNotifyTotalCount(self,task_id,params):
+        self.totalCount = self.dbHelper.query_notify_table_count(task_id,params)
 
     def updatePaginationUI(self):
         count = self.horizontalLayout_pagination.count()
@@ -178,7 +181,7 @@ class FaceTaskNotifyPage(Ui_Form_notify,QWidget):
             'time':self.currentTime,
             'start':(self.currentPage-1)*self.pageSize
         }
-        self.getNotifyTotalCount(params)
+        self.getNotifyTotalCount(self.current_task_id,params)
         print(params)
         db_back = self.dbHelper.select_task_all_notify(self.current_task_id,params)
         if(db_back):

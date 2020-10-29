@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QWidget,QApplication,QDesktopWidget
+from PyQt5.QtWidgets import QWidget,QDesktopWidget
+from PyQt5.QtGui import QIcon
 from ui.LoginUI import Ui_Form_login
 from view.HomeLayout import HomeWindow
-from utils.common import SYS_STYLE_LOGIN
+from utils.common import SYS_STYLE_COMMON
 from view.components.Header import Header
 
 
@@ -24,7 +25,9 @@ class LoginWindow(Ui_Form_login,QWidget):
                   (screen.height() - self.height()) / 2)
 
     def initUI(self):
-        self.setStyleSheet(SYS_STYLE_LOGIN)
+        self.setStyleSheet(SYS_STYLE_COMMON)
+        self.pushButton_username.setIcon(QIcon("static/images/username.png"))
+        self.pushButton_password.setIcon(QIcon("static/images/password.png"))
         self.initHeader()
 
     def initHeader(self):

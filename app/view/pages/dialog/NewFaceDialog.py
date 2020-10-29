@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QDialog,qApp,QFileDialog
 from ui.NewFaceUI import Ui_Dialog
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal,Qt
 from utils.common import msg_box,displayOriginImage
 from api.index import detectImage
 import base64
@@ -12,12 +12,14 @@ class NewFaceDialog(Ui_Dialog, QDialog):
     def __init__(self,libraryList):
         super(NewFaceDialog, self).__init__()
         self.setupUi(self)
+        self.setFixedSize(450,600)
         self._tr = qApp.translate
         self.libraryList = libraryList
         self.initData()
         self.updateLibraryComboboxUI()
         self.initSlot()
         self.initUI()
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def initData(self):
         self.current_library = None
@@ -47,9 +49,7 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         self.current_library = self.comboBox_library.itemData(i)
 
     def initSlot(self):
-        self.buttonBox.accepted.disconnect(self.accept)
-        self.buttonBox.accepted.connect(self.handleSubmit)
-        self.buttonBox.rejected.connect(self.handleCancel)
+        pass
 
     def openImage(self):
         try:
@@ -119,4 +119,4 @@ class NewFaceDialog(Ui_Dialog, QDialog):
             msg_box(self,self._tr('Form','server_connect_error'))
 
     def handleCancel(self):
-        pass
+        self.reject()

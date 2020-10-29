@@ -149,6 +149,21 @@
       <item>
        <widget class="QWidget" name="widget_left" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <spacer name="horizontalSpacer_6">
            <property name="orientation">
@@ -192,7 +207,7 @@ font-weight:500;</string>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>13</width>
+             <width>20</width>
              <height>20</height>
             </size>
            </property>
@@ -212,8 +227,17 @@ font-weight:500;</string>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>camera_preview</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -247,8 +271,17 @@ font-weight:500;</string>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>face_recognize</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -316,7 +349,7 @@ vertical-align:top;
 line-height:30px;</string>
               </property>
               <property name="text">
-               <string>!</string>
+               <string/>
               </property>
               <property name="class" stdset="0">
                <string>toolButton</string>
@@ -352,7 +385,7 @@ vertical-align:top;
 line-height:30px;</string>
               </property>
               <property name="text">
-               <string>-</string>
+               <string/>
               </property>
               <property name="class" stdset="0">
                <string>toolButton</string>

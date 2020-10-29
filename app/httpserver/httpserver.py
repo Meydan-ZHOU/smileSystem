@@ -31,10 +31,17 @@ class Resquest(BaseHTTPRequestHandler):
         print("====" + self.requestline)
         req_datas = self.rfile.read(int(self.headers['content-length']))  # 重点在此步!
         jsonData = json.loads(req_datas.decode())
+        if(jsonData == None or jsonData.get('data') == None):
+            return
         notify = jsonData['data']
         command = jsonData['command']
 
         face_id = notify["face_id"]
+
+        notify['register_image'] = ''
+        notify['face_name'] = ''
+        notify['face_lib_name'] = ''
+        notify['camera_name'] = ''
         # 获取注册个人头像
         db_back = dbHelper.select_single_face(face_id)
         if(db_back):

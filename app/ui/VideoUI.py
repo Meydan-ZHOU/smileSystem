@@ -64,6 +64,7 @@ class Ui_Form_video(object):
         self.pushButton_close.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_close.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_close.setStyleSheet("")
+        self.pushButton_close.setText("")
         self.pushButton_close.setObjectName("pushButton_close")
         self.horizontalLayout_2.addWidget(self.pushButton_close)
         spacerItem2 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -77,4 +78,3 @@ class Ui_Form_video(object):
         _translate = QtCore.QCoreApplication.translate
         Form_video.setWindowTitle(_translate("Form_video", "Form"))
         self.label.setText(_translate("Form_video", "please_click_left"))
-        self.pushButton_close.setText(_translate("Form_video", "X"))

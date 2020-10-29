@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog,qApp
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal,Qt
 from ui.AddCameraDialogUI import Ui_Dialog
 
 
@@ -9,11 +9,13 @@ class AddCameraDialog(Ui_Dialog, QDialog):
     def __init__(self,Data=None):
         super(AddCameraDialog, self).__init__()
         self.setupUi(self)
+        self.setFixedSize(550,400)
         self._tr = qApp.translate
         self.Data = Data
         self.initSlot()
         self.initUI()
         self.initData()
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def initUI(self):
         if(self.Data == None):

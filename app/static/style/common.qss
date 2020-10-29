@@ -1,17 +1,76 @@
 * {
     padding:0;
     margin:0;
-    font-family: "System,Microsoft YaHei UI,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji";
-    font-size:14px;
+    font-family:"Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
+    font-size:16px;
 	color:#a4a5a8;
 }
+
+QWidget[class='list_title']{
+    background-color:#191d2d;
+    padding:10px;
+}
+
+QLabel[class='list_title']{
+    background-color:#24283d;
+    padding:10px;
+}
+
+QWidget[class='toolbar']{
+    padding:10px 0;
+    border-top:1px solid #2e3557;
+    border-bottom:1px solid #2e3557;
+}
+
+#Form_login{
+   background-color:#191d2d;
+}
+
+#Form_login QLabel{
+    color:#fff;
+}
+
+#Form_login QLineEdit{
+    height:30px;
+    border-radius:2px;
+    padding-left:10px;
+}
+
+#label_login_title{
+    font-size:22px;
+    font-weight:600;
+    color:#fff;
+}
+
+QPushButton#login_btn{
+    height:24px;
+    padding:4px 15px;
+    color:#fff;
+    outline:0;
+    border:1px solid #66b1ff;
+    background-color:#66b1ff;
+    border-radius:2px;
+    cursor:pointer;
+}
+QPushButton#login_btn:hover,QPushButton#login_btn:focus{
+    color:#fff;
+    border:1px solid #3a8ee6;
+    background-color:#3a8ee6;
+    cursor:pointer;
+
+}
+
+QLabel#label_password,QLabel#label_username{
+    color:#a4a5a8;
+}
+
+
 #Form_home{
     background-color:#191d2d;
     color:#a4a5a8;
 }
 #label_system_title{
     color:#fff;
-    font-size:18px;
 }
 
 #widget_top{
@@ -28,7 +87,6 @@
     background-color:transparent;
     color:#a4a5a8;
     border:none;
-    font-size:14px;
 }
 
 #widget_nav QPushButton:hover,#widget_nav QPushButton:focus,#widget_nav QPushButton[class="active"]{
@@ -36,16 +94,31 @@
     color:#409eff;
 }
 
+QLineEdit,QComboBox,QDateTimeEdit,QDoubleSpinBox{
+    height:26px;
+    padding:2px 5px;
+    outline:none;
+    border:1px solid #2e3557;
+    background:transparent;
+}
+
+QComboBox QAbstractItemView::item {
+    width:200px;
+    height:30px;
+}
+
 /*按钮样式*/
 QPushButton{
-    font-size:12px;
+    height:22px;
     border-radius:2px;
     cursor:pointer;
-    padding:4px 6px;
+    font-weight:400;
+    padding:4px 10px;
+    vertical-align:middle;
 }
 
 QPushButton[sizeBtn='medium']{
-    padding:6px 8px;
+    padding:4px 12px;
     margin-right:10px;
 }
 
@@ -57,7 +130,6 @@ QPushButton[class="default"]{
     background-color:#fff;
     border:1px solid #dcdfe6;
     color:#606266;
-    font-size:14px;
 }
 
 QPushButton[class="default"]:hover{
@@ -70,7 +142,6 @@ QPushButton[class="primary"]{
     background-color:#409eff;
     border:1px solid #409eff;
     color:#fff;
-    font-size:14px;
 }
 
 QPushButton[class="primary"]:hover{
@@ -82,7 +153,6 @@ QPushButton[class="danger"]{
     background-color:#f56c6c;
     border:1px solid #f56c6c;
     color:#fff;
-    font-size:14px;
 }
 
 QPushButton[class="danger"]:hover{
@@ -91,20 +161,28 @@ QPushButton[class="danger"]:hover{
 }
 
 QPushButton#pushButton_onvif{
-    padding:4px 10px;
     transition: all 1s;
     line-height:1;
     outline:none;
-    font-weight:500;
     border-radius:2px;
     border:1px solid #2e3557;
-    background:transparent;
+    background:#3c3e62;
+    color:#a4a5a8;
 }
 
 QPushButton#pushButton_onvif:hover{
-    background-color:#3c3e62;
+    background-color:#41436b;
     color:#fff;
     border-color:#2e3557;
+}
+
+QPushButton#pushButton_add_camera{
+    border:1px solid #3c3e62;
+}
+
+QPushButton#pushButton_add_camera:hover{
+   background-color:#3c3e62;
+   color:#fff;
 }
 
 QPushButton[class='addButton']{
@@ -130,16 +208,13 @@ Dialog{
 
 /*表格样式*/
 QTableWidget{
-    color:#DCDCDC;
     background:transparent;
     border:1px solid #242424;
     alternate-background-color:#26294a;/*交错颜色*/
     gridline-color:#191d2d;
-    font-size:16px;
 }
 /*选中item*/
 QTableWidget::item{
-    font-size:20px;
 }
 
 /**/
@@ -235,7 +310,6 @@ QPushButton#pushButton_close{
     width:20px;
     height:20px;
     border-radius:10px;
-    font-size:12px;
     background-color:#000;
     vertical-align:top;
 }
@@ -249,6 +323,16 @@ QPushButton#pushButton_close:hover{
 
 QListWidget{
     background-color:#24283d;
+}
+
+QListWidget::Item{
+}
+
+QListWidget::Item:hover{
+}
+QListWidget::item:selected{
+}
+QListWidget::item:selected:!active{
 }
 
 QScrollArea,#scrollArea QWidget{

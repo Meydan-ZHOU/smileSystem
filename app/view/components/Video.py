@@ -2,7 +2,8 @@ from PyQt5.QtWidgets import QWidget,qApp
 import av, os, threading,time
 from ui.VideoUI import Ui_Form_video
 from PyQt5.QtGui import QImage, QPixmap,QMovie
-from PyQt5.QtCore import QCoreApplication
+
+import qtawesome
 import numpy as np
 
 mu = threading.Lock()
@@ -27,6 +28,7 @@ class Video(Ui_Form_video,QWidget):
     def initUI(self):
         self.width = self.size().width()
         self.height = self.size().height()
+        self.pushButton_close.setIcon(qtawesome.icon('fa.close',color='#e33e33'))
         self.label.setText(self._tr('Form_video', 'please_click_left'))
         self.label.setStyleSheet("background-color:transparent;")
         self.widget_tools.hide()
@@ -134,7 +136,7 @@ class Video(Ui_Form_video,QWidget):
             print("danny: start open",self.player[th_name]['player'])
             if self.player[th_name]['player']:
                 for frame in self.player[th_name]['player'].decode(video=0):
-                    if(frame.pts == None):
+                    if(frame==None or frame.pts == None):
                         continue
                     if(False == self.player[th_name]['isPlaying']):
                         self.initUI()
