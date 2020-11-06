@@ -9,12 +9,13 @@ import base64
 
 class NewFaceDialog(Ui_Dialog, QDialog):
     submit_add_face = pyqtSignal(dict)
-    def __init__(self,libraryList):
+    def __init__(self,libraryList,currentLibrary):
         super(NewFaceDialog, self).__init__()
         self.setupUi(self)
         self.setFixedSize(450,600)
         self._tr = qApp.translate
         self.libraryList = libraryList
+        self.currentLibrary = currentLibrary
         self.initData()
         self.updateLibraryComboboxUI()
         self.initSlot()
@@ -37,12 +38,16 @@ class NewFaceDialog(Ui_Dialog, QDialog):
         self.comboBox_library.clearEditText()
         comboBox = self.comboBox_library
         library = self.libraryList
+        curIndex = 0
+        cur_lib_name,cur_lib_id = self.currentLibrary
         for index, lib in enumerate(library):
             lib_name, lib_id = lib
             comboBox.addItem(lib_name)
             comboBox.setItemData(index, lib)
-        comboBox.setCurrentIndex(0)
-        self.libraryChange(0)
+            if(cur_lib_id == lib_id):
+                curIndex = index
+        comboBox.setCurrentIndex(curIndex)
+        self.libraryChange(curIndex)
         comboBox.currentIndexChanged.connect(self.libraryChange)
 
     def libraryChange(self,i):

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget,qApp
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QSize
 from ui.HeaderUI import Ui_Form_header
 from view.components.dialog.AppInfoDialog import AppInfoDialog
 
@@ -23,7 +23,7 @@ class Header(Ui_Form_header,QWidget):
         self.initIcon()
         self.myQSS()
         self.label_system_title.hide()
-        self.pushButton_0.setIcon(QIcon("static/images/view.png"))
+        self.pushButton_0.setIcon(QIcon("static/images/play.png"))
         self.pushButton_1.setIcon(QIcon("static/images/faceRecognize.png"))
         if self.HomeWindow.objectName() == 'Form_login':
             self.pushButton_max.hide()

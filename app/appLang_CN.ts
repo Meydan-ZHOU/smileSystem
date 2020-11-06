@@ -9,47 +9,47 @@
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="98"/>
+        <location filename="ui/AddCameraDialogUI.py" line="99"/>
         <source>ip</source>
         <translation>IP</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="99"/>
+        <location filename="ui/AddCameraDialogUI.py" line="100"/>
         <source>sn</source>
         <translation>SN</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="100"/>
+        <location filename="ui/AddCameraDialogUI.py" line="101"/>
         <source>username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="101"/>
+        <location filename="ui/AddCameraDialogUI.py" line="102"/>
         <source>password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="102"/>
+        <location filename="ui/AddCameraDialogUI.py" line="103"/>
         <source>url</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="103"/>
+        <location filename="ui/AddCameraDialogUI.py" line="104"/>
         <source>Submit</source>
         <translation>提交</translation>
     </message>
     <message>
-        <location filename="ui/AddCameraDialogUI.py" line="104"/>
+        <location filename="ui/AddCameraDialogUI.py" line="105"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="ui/AddLibraryDialogUI.py" line="56"/>
+        <location filename="ui/AddLibraryDialogUI.py" line="57"/>
         <source>face_library_name</source>
         <translation>人脸库名称</translation>
     </message>
     <message>
-        <location filename="ui/AddLibraryDialogUI.py" line="55"/>
+        <location filename="ui/AddLibraryDialogUI.py" line="56"/>
         <source>new_face_library</source>
         <translation>添加人脸库</translation>
     </message>
@@ -104,54 +104,59 @@
         <translation>性别</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="134"/>
+        <location filename="ui/AppInfoDialog.py" line="144"/>
         <source>app_info</source>
         <translation>客户端信息</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="135"/>
+        <location filename="ui/AppInfoDialog.py" line="145"/>
         <source>sdk_ver</source>
         <translation>Axstream SDK 版本</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="136"/>
+        <location filename="ui/AppInfoDialog.py" line="146"/>
         <source>face_recognize_ver</source>
         <translation>人脸识别软件版本</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="137"/>
+        <location filename="ui/AppInfoDialog.py" line="147"/>
         <source>face_manage_ver</source>
         <translation>人脸库管理软件版本</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="138"/>
+        <location filename="ui/AppInfoDialog.py" line="148"/>
         <source>server_address</source>
         <translation>设备地址</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="139"/>
+        <location filename="ui/AppInfoDialog.py" line="149"/>
         <source>language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="140"/>
+        <location filename="ui/AppInfoDialog.py" line="150"/>
         <source>english</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="141"/>
+        <location filename="ui/AppInfoDialog.py" line="151"/>
         <source>chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="142"/>
+        <location filename="ui/AppInfoDialog.py" line="153"/>
         <source>submit</source>
         <translation>提交</translation>
     </message>
     <message>
-        <location filename="ui/AppInfoDialog.py" line="143"/>
+        <location filename="ui/AppInfoDialog.py" line="154"/>
         <source>cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="ui/AppInfoDialog.py" line="152"/>
+        <source>clien_ver</source>
+        <translation>客户端版本</translation>
     </message>
 </context>
 <context>
@@ -506,56 +511,61 @@
 <context>
     <name>Form_library</name>
     <message>
-        <location filename="ui/FaceLibrary.py" line="138"/>
+        <location filename="ui/FaceLibrary.py" line="140"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/FaceLibrary.py" line="139"/>
+        <location filename="ui/FaceLibrary.py" line="142"/>
         <source>face_library</source>
         <translation>人脸库</translation>
     </message>
     <message>
-        <location filename="ui/FaceLibrary.py" line="140"/>
+        <location filename="ui/FaceLibrary.py" line="143"/>
         <source>new_face</source>
         <translation>新建人脸</translation>
     </message>
     <message>
-        <location filename="ui/FaceLibrary.py" line="141"/>
+        <location filename="ui/FaceLibrary.py" line="144"/>
         <source>primary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/FaceLibrary.py" line="142"/>
+        <location filename="ui/FaceLibrary.py" line="145"/>
         <source>update_face</source>
         <translation>刷新人脸</translation>
     </message>
     <message>
-        <location filename="ui/FaceLibrary.py" line="143"/>
+        <location filename="ui/FaceLibrary.py" line="146"/>
         <source>default</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="ui/FaceLibrary.py" line="141"/>
+        <source>list_title</source>
         <translation></translation>
     </message>
 </context>
 <context>
     <name>Form_live</name>
     <message>
-        <location filename="ui/LiveUI.py" line="106"/>
+        <location filename="ui/LiveUI.py" line="108"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
         <location filename="ui/LiveUI.py" line="107"/>
         <source>Onvif Search Device</source>
-        <translation>ONVIF搜索设备</translation>
+        <translation type="obsolete">ONVIF搜索设备</translation>
     </message>
     <message>
-        <location filename="ui/LiveUI.py" line="108"/>
+        <location filename="ui/LiveUI.py" line="109"/>
         <source>Camera List</source>
         <translation>摄像头列表</translation>
     </message>
     <message>
-        <location filename="ui/LiveUI.py" line="109"/>
-        <source>addButton</source>
+        <location filename="ui/LiveUI.py" line="110"/>
+        <source>list_title</source>
         <translation></translation>
     </message>
 </context>
@@ -605,60 +615,65 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="216"/>
+        <location filename="ui/FaceTaskUI.py" line="217"/>
         <source>face_library</source>
         <translation>人脸库</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="217"/>
+        <location filename="ui/FaceTaskUI.py" line="218"/>
         <source>camera_list</source>
         <translation>摄像头列表</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="218"/>
+        <location filename="ui/FaceTaskUI.py" line="219"/>
         <source>camera_preview</source>
         <translation>视频预览</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="219"/>
+        <location filename="ui/FaceTaskUI.py" line="220"/>
         <source>other_setting</source>
         <translation>其他设置</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="220"/>
+        <location filename="ui/FaceTaskUI.py" line="221"/>
         <source>similarity</source>
         <translation>相似度</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="221"/>
+        <location filename="ui/FaceTaskUI.py" line="222"/>
         <source>submit</source>
         <translation>提交</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="222"/>
+        <location filename="ui/FaceTaskUI.py" line="223"/>
         <source>primary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="223"/>
+        <location filename="ui/FaceTaskUI.py" line="224"/>
         <source>cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="ui/FaceTaskUI.py" line="224"/>
+        <location filename="ui/FaceTaskUI.py" line="225"/>
         <source>default</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="ui/FaceTaskUI.py" line="216"/>
+        <source>toolbar</source>
         <translation></translation>
     </message>
 </context>
 <context>
     <name>Form_notify</name>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="112"/>
+        <location filename="ui/TaskNotifyUI.py" line="113"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="113"/>
+        <location filename="ui/TaskNotifyUI.py" line="115"/>
         <source>name</source>
         <translation>姓名</translation>
     </message>
@@ -668,39 +683,44 @@
         <translation type="obsolete">时间</translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="115"/>
+        <location filename="ui/TaskNotifyUI.py" line="117"/>
         <source>camera</source>
         <translation>摄像头</translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="116"/>
+        <location filename="ui/TaskNotifyUI.py" line="118"/>
         <source>face_library</source>
         <translation>人脸库</translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="117"/>
+        <location filename="ui/TaskNotifyUI.py" line="119"/>
         <source>search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="118"/>
+        <location filename="ui/TaskNotifyUI.py" line="120"/>
         <source>default</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="119"/>
+        <location filename="ui/TaskNotifyUI.py" line="121"/>
         <source>get_latest</source>
         <translation>获取最新</translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="120"/>
+        <location filename="ui/TaskNotifyUI.py" line="122"/>
         <source>primary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ui/TaskNotifyUI.py" line="114"/>
+        <location filename="ui/TaskNotifyUI.py" line="116"/>
         <source>start_time</source>
         <translation>开始时间</translation>
+    </message>
+    <message>
+        <location filename="ui/TaskNotifyUI.py" line="114"/>
+        <source>toolbar</source>
+        <translation></translation>
     </message>
 </context>
 <context>

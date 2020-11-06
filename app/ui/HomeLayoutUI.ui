@@ -119,7 +119,7 @@
            <bool>true</bool>
           </property>
           <property name="styleSheet">
-           <string notr="true">font-size:12px;
+           <string notr="true">font-size:14px;
 color:#7a7b7e;</string>
           </property>
           <property name="lineWidth">

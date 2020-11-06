@@ -226,7 +226,7 @@ class FaceLibraryPage(Ui_Form_library,QWidget):
         if(len(self.libraryList)==0):
             msg_box(self,self._tr("Form", "please_first_create_face_library"))
             return
-        self.newFaceDialog = NewFaceDialog(self.libraryList)
+        self.newFaceDialog = NewFaceDialog(self.libraryList,self.currentLibrary )
         self.newFaceDialog.submit_add_face.connect(lambda data: self.submitAddFace(data))
         self.newFaceDialog.show()
 

@@ -1,47 +1,49 @@
+"""This module is used to get the ip and the information related to
+each camera on the same network."""
+
+__version__ = '1.0.11'
+
 import subprocess
 from typing import List
 import WSDiscovery
-import socket
-from onvif import ONVIFCamera
 
-from camera_discovery import CameraDiscovery
-
-import zeep #额外加的
+from utils.WSDiscovery import WSDiscovery
+from utils.common import get_host_ip
 
 
-def get_host_ip():
-    try:
-        s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-    finally:
-        s.close()
-    return ip
-
-
-def ws_discovery(scope = None) -> List:
+def ws_discovery(scope=None) -> List:
     """Discover cameras on network using onvif discovery.
 
     Returns:
         List: List of ips found in network.
     """
     lst = list()
-    if (scope == None):
-        scope = get_host_ip()
+    scope = get_host_ip()
     if (scope == None):
         cmd = 'hostname -I'
         scope = subprocess.check_output(cmd, shell=True).decode('utf-8')
-    wsd = WSDiscovery.WSDiscovery()
+
+    wsd = WSDiscovery()
     wsd.start()
+    # ttype = QName("abc", "def")
+    #
+    # ttype1 = QName("namespace", "myTestService")
+    # scope1 = Scope("http://myscope")
+    # ttype2 = QName("namespace", "myOtherTestService_type1")
+    # scope2 = Scope("http://other_scope")
+    #
+    # xAddrs = ["localhost:8080/abc", '{ip}/device_service']
+    # wsd.publishService(types=[ttype], scopes=[scope2], xAddrs=xAddrs)
+
     ret = wsd.searchServices()
+    print("ret", ret)
     for service in ret:
-        print(service)
         get_ip = str(service.getXAddrs())
         get_types = str(service.getTypes())
         for ip_scope in scope.split():
             result = get_ip.find(ip_scope.split('.')[0] + '.' + ip_scope.split('.')[1])
             if result > 0 and get_types.find('onvif') > 0:
-                string_result = get_ip[result:result+13]
+                string_result = get_ip[result:result + 13]
                 string_result = string_result.split('/')[0]
                 lst.append(string_result)
     wsd.stop()
@@ -49,38 +51,31 @@ def ws_discovery(scope = None) -> List:
     return lst
 
 
-class CameraOnvif:
+class CameraONVIF:
     """This class is used to get the information from all cameras discovered on this specific
-        network."""
-    def __init__(self, ip,user, password, port):
+    network."""
+
+    def __init__(self, ip, user, password):
         """Constructor.
 
-               Args:
-                   ip (str): Ip of the camera.
-                   user (str): Onvif login.
-                   password (str): Onvif password.
-               """
+        Args:
+            ip (str): Ip of the camera.
+            user (str): Onvif login.
+            password (str): Onvif password.
+        """
         self.cam_ip = ip
         self.cam_user = user
         self.cam_password = password
-        self.cam_port = port  # 加入port参数
-
-    def zeep_pythonvalue(self, xmlvalue):  # 额外加的
-        return xmlvalue
 
     def camera_start(self):
         """Start module.
         """
         mycam = ONVIFCamera(self.cam_ip, 80, self.cam_user, self.cam_password, no_cache=True)
         media = mycam.create_media_service()
-
-        zeep.xsd.simple.AnySimpleType.pythonvalue = self.zeep_pythonvalue  # 额外加的
-
         media_profile = media.GetProfiles()[0]
         self.mycam = mycam
         self.camera_media = media
         self.camera_media_profile = media_profile
-
 
     def get_hostname(self) -> str:
         """Find hostname of camera.
@@ -91,7 +86,6 @@ class CameraOnvif:
         resp = self.mycam.devicemgmt.GetHostname()
         return resp.Name
 
-
     def get_manufacturer(self) -> str:
         """Find manufacturer of camera.
 
@@ -100,7 +94,6 @@ class CameraOnvif:
         """
         resp = self.mycam.devicemgmt.GetDeviceInformation()
         return resp.Manufacturer
-
 
     def get_model(self) -> str:
         """Find model of camera.
@@ -111,7 +104,6 @@ class CameraOnvif:
         resp = self.mycam.devicemgmt.GetDeviceInformation()
         return resp.Model
 
-
     def get_firmware_version(self) -> str:
         """Find firmware version of camera.
 
@@ -120,7 +112,6 @@ class CameraOnvif:
         """
         resp = self.mycam.devicemgmt.GetDeviceInformation()
         return resp.FirmwareVersion
-
 
     def get_mac_address(self) -> str:
         """Find serial number of camera.
@@ -131,7 +122,6 @@ class CameraOnvif:
         resp = self.mycam.devicemgmt.GetDeviceInformation()
         return resp.SerialNumber
 
-
     def get_hardware_id(self) -> str:
         """Find hardware id of camera.
 
@@ -140,7 +130,6 @@ class CameraOnvif:
         """
         resp = self.mycam.devicemgmt.GetDeviceInformation()
         return resp.HardwareId
-
 
     def get_resolutions_available(self) -> List:
         """Find all resolutions of camera.
@@ -152,7 +141,6 @@ class CameraOnvif:
         request.ProfileToken = self.camera_media_profile.token
         config = self.camera_media.GetVideoEncoderConfigurationOptions(request)
         return [(res.Width, res.Height) for res in config.H264.ResolutionsAvailable]
-
 
     def get_frame_rate_range(self) -> int:
         """Find the frame rate range of camera.
@@ -166,7 +154,6 @@ class CameraOnvif:
         config = self.camera_media.GetVideoEncoderConfigurationOptions(request)
         return config.H264.FrameRateRange.Min, config.H264.FrameRateRange.Max
 
-
     def get_date(self) -> str:
         """Find date configured on camera.
 
@@ -176,7 +163,6 @@ class CameraOnvif:
         datetime = self.mycam.devicemgmt.GetSystemDateAndTime()
         return datetime.UTCDateTime.Date
 
-
     def get_time(self) -> str:
         """Find local hour configured on camera.
 
@@ -185,7 +171,6 @@ class CameraOnvif:
         """
         datetime = self.mycam.devicemgmt.GetSystemDateAndTime()
         return datetime.UTCDateTime.Time
-
 
     def is_ptz(self) -> bool:
         """Check if camera is PTZ or not.

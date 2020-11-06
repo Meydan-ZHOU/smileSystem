@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog,qApp
 from PyQt5.QtCore import Qt
 from ui.AppInfoDialog import Ui_Dialog
 from api.index import getAppInfo
+import datetime
 
 from PyQt5.QtCore import QSettings,QCoreApplication
 
@@ -12,7 +13,7 @@ class AppInfoDialog(Ui_Dialog, QDialog):
     def __init__(self):
         super(AppInfoDialog, self).__init__()
         self.setupUi(self)
-        self.setFixedSize(550,450)
+        self.setFixedSize(600,450)
         self._tr = qApp.translate
         self.initSlot()
         self.initUI()
@@ -23,6 +24,7 @@ class AppInfoDialog(Ui_Dialog, QDialog):
 
 
     def initUI(self):
+        self.lineEdit_4.setText("1.0.0")
         regSettings = QSettings(QCoreApplication.organizationName(), QCoreApplication.applicationName())
         language = regSettings.value('Language', 'EN')
         if(language =='EN'):

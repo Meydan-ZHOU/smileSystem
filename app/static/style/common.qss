@@ -75,7 +75,6 @@ QLabel#label_password,QLabel#label_username{
 
 #widget_top{
     background-color:#24283d;
-    border-bottom:2px solid #191d2d
 }
 
 #widget_bottom {
@@ -86,6 +85,7 @@ QLabel#label_password,QLabel#label_username{
 #widget_nav QPushButton{
     background-color:transparent;
     color:#a4a5a8;
+    padding:0;
     border:none;
 }
 
@@ -109,12 +109,10 @@ QComboBox QAbstractItemView::item {
 
 /*按钮样式*/
 QPushButton{
-    height:22px;
     border-radius:2px;
     cursor:pointer;
     font-weight:400;
     padding:4px 10px;
-    vertical-align:middle;
 }
 
 QPushButton[sizeBtn='medium']{

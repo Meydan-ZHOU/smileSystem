@@ -10,7 +10,6 @@ from utils.common import msg_box,btn_set_pointer_cursor
 
 from sql.DBHelper import DBHelper
 
-from utils.CameraOnvif import ws_discovery
 
 import qtawesome
 
@@ -44,8 +43,8 @@ class LivePage(Ui_Form_live,QWidget):
 
     def discoveryCameraOnvif(self):
         pass
-        #cameraList = ws_discovery()
-        #print(cameraList)
+        # cameraList = ws_discovery()
+        # print("cameraList----------",cameraList)
 
 
     def updateCameraListUI(self):

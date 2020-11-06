@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox,qApp
 from PyQt5.QtGui import QPixmap,QCursor
 from PyQt5.QtCore import Qt
-import os,sys
+import os, sys, socket
 dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
 
 _tr = qApp.translate
@@ -48,6 +48,16 @@ def displayOriginImage(label,imagePath,width=None,height=None):
     label.setFixedHeight(h)
     label.setPixmap(jpg1)
     label.setScaledContents(True)
+
+
+def get_host_ip():
+    try:
+        s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
 
 
 SYS_STYLE_COMMON = CommonHelper.readQSS("./static/style/common.qss")
